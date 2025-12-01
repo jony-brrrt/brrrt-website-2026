@@ -222,30 +222,31 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   position:relative;
   width:100%;
   overflow:hidden;
-  height:80px;
-  margin-top:12px;
+  /* 💥 FIX 1: INCREASED HEIGHT for breathing room 💥 */
+  height:100px; 
+  /* 💥 FIX 2: ADDED PADDING (top margin) 💥 */
+  margin-top:40px; 
   display:flex;
   align-items:center;
-  touch-action: none; /* Crucial for preventing default scroll on drag */
+  touch-action: none; 
 }
 
 #partners-strip-inner{
   display:flex; 
-  position:absolute; 
-  left:0; 
+  min-width: 200%; 
   top:50%; 
-  white-space:nowrap; 
-  /* The animation is now controlled entirely by JS physics loop */
   transform:translateY(-50%); 
-  cursor: grab; 
   will-change: transform; 
 }
 
-#partners-strip-inner:active {
-    cursor: grabbing;
+/* 💥 FIX 3: Ensure logos scale proportionally and don't touch the top/bottom of the inner container 💥 */
+#partners-strip-inner img{
+  height:60px; /* Reduced height relative to the 100px container */
+  width: auto; 
+  object-fit: contain; 
+  margin:0 32px;
+  display:inline-block
 }
-
-#partners-strip-inner img{height:52px;margin:0 32px;display:inline-block}
 
 
 @keyframes flickerRed{ 0%{background:var(--sfx-bg)} 50%{background:#ff4444} 100%{background:var(--sfx-bg)} }
@@ -261,7 +262,19 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   .sfx-button{width:72px;height:72px;font-size:14px}
   .control-btn{width:72px;font-size:13px;padding:6px}
   #trackName{font-size:11px}
-  #partners-strip-inner img{height:44px;margin:0 24px}
+  
+  /* 💥 MOBILE FIX: Ensure logos scale proportionally and don't touch the top/bottom 💥 */
+  #partners-strip{
+    height: 80px; /* Slightly reduced height on mobile */
+    margin-top: 30px; /* Reduced margin on mobile */
+  }
+  
+  #partners-strip-inner img{
+    height:48px; /* Reduced logo height relative to 80px container */
+    width: auto; 
+    object-fit: contain; 
+    margin:0 24px
+  }
   
   /* Waveform on small screens */
   #waveformContainer {
@@ -336,7 +349,25 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
     <img src="instagram.png" alt="Instagram" style="width:48px;height:48px;margin-top:12px">
   </a>
   <div id="partners-strip">
-    <div id="partners-strip-inner"></div>
+    <div id="partners-strip-inner">
+      <img src="visual/partners/icy_ghost.png" alt="Icy Ghost Logo">
+      <img src="visual/partners/sneakyp.png" alt="Sneakyp Logo">
+      <img src="visual/partners/microsoft.png" alt="Microsoft Logo"> 
+      <img src="visual/partners/scopely.png" alt="Scopely Logo"> 
+      <img src="visual/partners/lootheads.png" alt="Lootheads Logo"> 
+      <img src="visual/partners/whalo.png" alt="Whalo Logo"> 
+      <img src="visual/partners/hearsay.png" alt="Hearsay Logo"> 
+      <img src="visual/partners/glaive.png" alt="Glaive Logo"> 
+      <img src="visual/partners/okami.png" alt="Okami Logo"> 
+      <img src="visual/partners/playspark.png" alt="Playspark Logo"> 
+      <img src="visual/partners/parana.png" alt="Parana Logo"> 
+      <img src="visual/partners/uni.png" alt="Uni Logo"> 
+      <img src="visual/partners/candivore.png" alt="Candivore Logo"> 
+      <img src="visual/partners/lineup.png" alt="Lineup Logo"> 
+      <img src="visual/partners/obscure.png" alt="Obscure Logo"> 
+      <img src="visual/partners/jelly.png" alt="Jelly Logo"> 
+      <img src="visual/partners/heimdall.png" alt="Heimdall Logo">
+    </div>
   </div>
 </section>
 
@@ -719,7 +750,7 @@ function updatePhysics() {
     currentVelocity = currentVelocity + (targetVelocity - currentVelocity) * lerpFactor;
   } else {
     const target = isPlaying ? 1.0 : 0.0;
-    const inertia = isPlaying ? 10.0 : 8.0; 
+    const inertia = 10.0; 
     const diff = target - currentVelocity;
     if(Math.abs(diff) < 0.001) currentVelocity = target;
     else currentVelocity += diff * (dt * inertia);
@@ -892,7 +923,7 @@ document.getElementById('refreshButton').addEventListener('click', async()=>{
   refreshSFX();
 });
 
-/* ================= PARTNERS STRIP LOGIC (Drag & Momentum) ================= */
+/* ================= PARTNERS STRIP LOGIC (Infinite Loop) ================= */
 
 const partnersInner=document.getElementById('partners-strip-inner');
 const partnersStrip = document.getElementById('partners-strip');
@@ -902,12 +933,12 @@ const partnerFiles = [
 ];
 
 let isStripScrubbing = false;
-let stripPosition = 0; // Current position in pixels
-let stripVelocity = 0; // Current velocity (pixels/second)
-let stripStartRate = -100; // The default scroll rate in pixels/second (TUNE THIS for speed: negative for left scroll)
+let stripPosition = 0; 
+let stripVelocity = 0; 
+let stripStartRate = -100; 
 let lastStripPointerX = 0;
 let lastStripTimestamp = performance.now();
-let setWidthPx = 0; // Measured width of one set of logos
+let setWidthPx = 0; 
 
 
 function updateStripPhysics() {
@@ -915,15 +946,19 @@ function updateStripPhysics() {
   const dt = (now - lastStripTimestamp) / 1000; 
   lastStripTimestamp = now;
 
+  if (setWidthPx === 0) {
+      requestAnimationFrame(updateStripPhysics);
+      return;
+  }
+  
   if (isStripScrubbing) {
-    // Velocity is handled directly in pointermove for immediate feedback
+    // If scrubbing, position is updated directly in pointermove
   } else {
-    // Deceleration/Ramp-down when released
+    // If not scrubbing, smoothly return velocity to the default auto-scroll rate
     const target = stripStartRate; 
-    const inertia = 5.0; // Controls how quickly the strip returns to default speed
+    const inertia = 5.0; 
     const diff = target - stripVelocity;
     
-    // Smoothly transition the velocity back to the default scroll rate
     if (Math.abs(diff) > 0.1) {
       stripVelocity += diff * (dt * inertia);
     } else {
@@ -934,90 +969,88 @@ function updateStripPhysics() {
   // Update position based on velocity
   stripPosition += stripVelocity * dt;
 
-  // Seamless looping logic (Wraps the position back when it exceeds one set's width)
-  if (setWidthPx > 0) {
-      if (stripPosition < -setWidthPx) {
-          // Scrolled past the end, reset to start
-          stripPosition += setWidthPx;
-      } else if (stripPosition > 0) {
-          // Scrolled backward past the start, reset to the end
-          stripPosition -= setWidthPx;
-      }
+  // 💥 SEAMLESS LOOPING LOGIC 💥
+  if (stripPosition < -setWidthPx) {
+      stripPosition += setWidthPx; 
+  } else if (stripPosition > 0) {
+      stripPosition -= setWidthPx; 
   }
-
+  
   // Apply the position visually: translate3d is used for hardware acceleration
   partnersInner.style.transform = `translate3d(${stripPosition}px, -50%, 0)`;
 
   requestAnimationFrame(updateStripPhysics);
 }
 
-// ... (Partners strip initialization and input handlers remain the same) ...
-
 function setupPartnersStrip() {
-    // Duplicate the logos to create the seamless loop effect
+    // Get the HTML content of the initial set of logos
     const logoSet = partnersInner.innerHTML;
+    
+    // Duplicate the logos to create the seamless loop effect
     partnersInner.innerHTML = logoSet + logoSet; 
 
-    // Measure the width of a single set of logos
-    // Must wait for images to load if possible, but we'll measure immediately for the loop
-    const firstSet = partnersInner.children.length / 2;
+    // Measure the width of one full set of logos
     let totalWidth = 0;
-    for(let i = 0; i < firstSet; i++) {
+    const firstSetChildren = partnersInner.children.length / 2;
+    for(let i = 0; i < firstSetChildren; i++) {
         const child = partnersInner.children[i];
-        totalWidth += child.offsetWidth + (parseInt(getComputedStyle(child).marginLeft) * 2); 
+        
+        if (child.offsetWidth > 0) {
+            const style = getComputedStyle(child);
+            // Must account for the explicit margins (32px on each side)
+            totalWidth += child.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+        } else {
+            console.warn("Partner logo width is zero, re-attempting measurement.");
+            setTimeout(setupPartnersStrip, 200); 
+            return;
+        }
     }
+    
     setWidthPx = totalWidth;
-
+    
+    // Ensure the track starts scrolling automatically
+    stripVelocity = stripStartRate; 
     requestAnimationFrame(updateStripPhysics); 
 }
 
 // Partner Strip Drag Handlers
 partnersStrip.addEventListener('pointerdown', (e) => {
+    if (setWidthPx === 0) return;
+    
     e.preventDefault(); 
     partnersStrip.setPointerCapture(e.pointerId);
     isStripScrubbing = true;
     lastStripPointerX = e.clientX;
-    stripVelocity = 0; // Stop auto-scrolling instantly
-    partnersInner.style.cursor = 'grabbing';
+    stripVelocity = 0; 
 });
 
 window.addEventListener('pointermove', (e) => {
-    if (!isStripScrubbing) return;
-    const dx = e.clientX - lastStripPointerX;
-    lastStripPointerX = e.clientX;
-    
-    // Update position directly for immediate feedback
-    stripPosition += dx;
-
-    // Apply a large, immediate velocity proportional to the drag speed
-    // This is useful if the physics loop isn't running very fast.
-    stripVelocity = dx * (1000 / (performance.now() - lastStripTimestamp)); 
-    
-    lastStripTimestamp = performance.now();
+  if (!isStripScrubbing) return;
+  e.preventDefault();
+  const dx = e.clientX - lastStripPointerX;
+  lastStripPointerX = e.clientX;
+  
+  // Directly update position based on drag movement
+  stripPosition += dx;
+  
+  // Apply the position visually immediately during drag 
+  partnersInner.style.transform = `translate3d(${stripPosition}px, -50%, 0)`;
 });
 
 window.addEventListener('pointerup', (e) => {
     if (!isStripScrubbing) return;
     isStripScrubbing = false;
-    partnersInner.style.cursor = 'grab';
-    
-    // Resume physics loop, which will apply inertia to stripVelocity and eventually
-    // transition back to stripStartRate.
+    // Physics loop takes over and ramps back to stripStartRate
 });
 
-// Load the partners strip images (for simple example)
-partnerFiles.forEach(file => {
-    const img = document.createElement('img');
-    img.src = `visual/partners/${file}`;
-    img.alt = '';
-    partnersInner.appendChild(img);
+
+/* ================= INITIALIZATION ================= */
+// Call the setup function after all code is parsed
+window.addEventListener('load', () => {
+  loadRandomTrack();
+  refreshSFX();
+  setupPartnersStrip(); // Start the partner strip setup and animation
 });
-
-/* ================= INIT ================= */
-loadRandomTrack();
-refreshSFX();
-setupPartnersStrip();
-
 </script>
 </body>
 </html>
