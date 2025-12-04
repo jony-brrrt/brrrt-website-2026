@@ -154,7 +154,8 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   margin-top:12px;
   color:var(--muted);
   font-size:18px;
-  min-height: 18px; 
+  /* 🛑 FIX: Explicitly set a fixed height to prevent vertical jump */
+  height: 24px; /* Setting a fixed height slightly larger than font-size:18px for better spacing */
   display: flex;
   align-items: center;
   justify-content: center;
