@@ -18,6 +18,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'CourierNewt';
+  src: url('fonts/Courier New.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 :root{
   /* --- COLOR INVERSION (Light Mode) --- */
@@ -39,7 +45,7 @@ html,body{
   height:100%; margin:0;
   background:var(--bg); 
   color:var(--text-main); 
-  font-family: 'KomikaText', Arial, Helvetica, sans-serif;
+  font-family: 'Courier New', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
   
@@ -57,14 +63,14 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
 
 /* Titles using KOMIKAGL */
 .title-main {
-  font-family: 'KomikaTitle', sans-serif;
+  font-family: 'Komika', sans-serif;
   font-size:28px;
   line-height:1;
   margin:6px 0 0;
   font-weight:normal;
   letter-spacing:0.5px
 }
-.title-sub{font-size:60px;margin:2px 0 6px;color:var(--muted)}
+.title-sub{font-size:30px;margin:2px 0 6px;color:var(--muted)}
 
 /* Player area compact */
 #player{display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding-bottom:6px}
@@ -145,9 +151,9 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
 
 /* Track name */
 #trackName{
-  margin-top:8px;
+  margin-top:12px;
   color:var(--muted);
-  font-size:12px;
+  font-size:18px;
   min-height: 18px; 
   display: flex;
   align-items: center;
@@ -207,9 +213,9 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
 
 /* Section Titles using KOMIKAGL */
 .page2-title, .page3-title { 
-  font-family: 'KomikaTitle', sans-serif;
+  font-family: 'Komika', sans-serif;
   padding-top:28px; 
-  font-size:24px; 
+  font-size:40px; 
   font-weight:normal; 
   margin-bottom:12px; 
   color: var(--text-main);
@@ -439,17 +445,17 @@ const trackList=[
     { url: 'Afternoon Adventure.ogg', display: 'Afternoon Adventure' },
     { url: 'a Swing Of Cards.ogg', display: 'a Swing Of Cards' },
     { url: 'Count The Yellow Cars.ogg', display: 'Count The Yellow Cars' },
-    { url: 'Premium Dice.mp3', display: 'Premium Dice' },
+    { url: 'Premium Dice.ogg', display: 'Premium Dice' },
     { url: 'Digital Dungeon.ogg', display: 'Digital Dungeon' },
-    { url: 'Estoria Warned You.mp3', display: 'Estoria Warned You' },
+    { url: 'Her Majesty (w.Jane Perry).ogg', display: 'Her Majesty (w.Jane Perry)' },
     { url: 'Factory Settings.ogg', display: 'Factory Settings' },
     { url: 'Fits In My Garage.ogg', display: 'Fits In My Garage' }, 
     { url: 'Halloween Machine.ogg', display: 'Halloween Machine' },
-    { url: 'Hawaiian Serenety.ogg', display: 'Hawaiian Serenety' },
-    { url: 'Hunted Dungeon.mp3', display: 'Hunted Dungeon' },
-    { url: 'Id Love To Be There.mp3', display: 'Id Love To Be There' },
+    { url: 'Island Lovers.ogg', display: 'Island Lovers' },
+    { url: 'Hunted Dungeon.ogg', display: 'Hunted Dungeon' },
+    { url: 'Id Love To Be There.ogg', display: 'Id Love To Be There' },
     { url: 'Mansion Halls.ogg', display: 'Mansion Halls' },
-    { url: 'Match Masters Live Band.ogg', display: 'Match Masters Live Band' },
+    { url: 'Match Masters Theme (Live).ogg', display: 'Match Masters Theme (Live)' },
     { url: 'Retroy.ogg', display: 'Retroy' },
     { url: 'Thats One Busy Lobby.ogg', display: 'Thats One Busy Lobby' },
     { url: 'The Good Ol Candyland.ogg', display: 'The Good Ol Candyland' },
@@ -457,6 +463,49 @@ const trackList=[
     { url: 'Trick Or Deal.ogg', display: 'Trick Or Deal' },
     { url: 'Warm Winter Cabin.ogg', display: 'Warm Winter Cabin' },
     { url: 'Thanksgiving Memory Trail.ogg', display: 'Thanksgiving Memory Trail' },
+    { url: 'Amongst Us.ogg', display: 'Amongst Us' },
+    { url: 'Annual Parade.ogg', display: 'Annual Parade' },
+    { url: 'Avast Ye!.ogg', display: 'Avast Ye!' },
+    { url: 'Magical Cave.ogg', display: 'Magical Cave' },
+    { url: 'Family Holiday.ogg', display: 'Family Holiday' },
+    { url: 'Tequilla Sunset.ogg', display: 'Tequilla Sunset' },
+    { url: 'Forest Day Picking.ogg', display: 'Forest Day Picking' },
+    { url: 'Back Home.ogg', display: 'Back Home' },
+    { url: 'Tokya.ogg', display: 'Tokya' },
+    { url: 'Taverna Logic.ogg', display: 'Taverna Logic' },
+    { url: 'Ode To Oud.ogg', display: 'Ode To Oud' },
+    { url: 'Desert Nights.ogg', display: 'Desert Nights' },
+    { url: 'Urban Museum Visit.ogg', display: 'Urban Museum Visit' },
+    { url: 'Raiders Of Sand.ogg', display: 'Raiders Of Sand' },
+    { url: 'Chasing Goats.ogg', display: 'Chasing Goats' },
+    { url: 'Lobby Encounter.ogg', display: 'Lobby Encounter' },
+    { url: 'Mystery Bit.ogg', display: 'Mystery Bit' },
+    { url: 'Shazi Appeal.ogg', display: 'Shazi Appeal' },
+    { url: 'Chicago Bullys.ogg', display: 'Chicgo Bullys' },
+    { url: 'One Last Heist.ogg', display: 'One Last Heist' },
+    { url: 'Punk Masters.ogg', display: 'Punk Masters' },
+    { url: 'Space Masters.ogg', display: 'Space Masters' },
+    { url: 'Animate This!.ogg', display: 'Animate This!' },
+    { url: 'Mall Mayhem.ogg', display: 'Mall Mayhem' },
+    { url: 'Dad Jeans.ogg', display: 'Dad Jeans' },
+    { url: 'Swing Masters.ogg', display: 'Swing Masters' },
+    { url: 'Crumbs Of Justice.ogg', display: 'Crumbs Of Justice' },
+    { url: 'Man O War.ogg', display: 'Man O War' },
+    { url: 'Mountain Oddissey.ogg', display: 'Mountain Oddissey' },
+    { url: 'New Type Of Evil.ogg', display: 'New Type Of Evil' },
+    { url: 'Path Of The Gecko.ogg', display: 'Path Of The Gecko' },
+    { url: 'Rift Of Riffs.ogg', display: 'Rift Of Riffs' },
+    { url: 'Sneaky Orc.ogg', display: 'Sneaky Orc' },
+    { url: 'Solarian Flare.ogg', display: 'Solarian Flare' },
+    { url: 'Tectonic Rumble.ogg', display: 'Tectonic Rumble' },
+    { url: 'Terak Path.ogg', display: 'Terak Path' },
+    { url: 'Underworld Roaming.ogg', display: 'Underworld Roaming' },
+    { url: 'Analouge Heist.ogg', display: 'Analouge Heist' },
+    { url: 'Drift Funnel.ogg', display: 'Drift Funnel' },
+    { url: 'TP For My Townhall.ogg', display: 'TP For My Townhall' },
+    { url: 'Trap Boy.ogg', display: 'Trap Boy' },
+    { url: 'Saving Harold.ogg', display: 'Saving Harold' },
+    
 ];
 
 let tracks = trackList.map(t => ({
@@ -870,7 +919,7 @@ const sfxGridInner=document.getElementById('sfx-grid-inner');
 const sfxButtons=[];
 const sfxBuffers={};
 const sfxPath='audio/sfx/';
-const sfxFiles=['sfx1.ogg','sfx2.ogg','sfx3.ogg','sfx4.ogg','sfx5.ogg','sfx6.ogg','sfx7.ogg','sfx8.ogg','sfx9.ogg'];
+const sfxFiles=['sfx1.ogg','sfx2.ogg','sfx3.ogg','sfx4.ogg','sfx5.ogg','sfx6.ogg','sfx7.ogg','sfx8.ogg','sfx9.ogg', 'sfx10.ogg', 'sfx11.ogg','sfx12.ogg', 'sfx13.ogg','sfx14.ogg', 'sfx15.ogg','sfx16.ogg','sfx17.ogg','sfx18.ogg','sfx19.ogg','sfx20.ogg','sfx21.ogg','sfx22.ogg','sfx23.ogg','sfx24.ogg','sfx25.ogg','sfx26.ogg','sfx27.ogg','sfx28.ogg','sfx29.ogg','sfx30.ogg','sfx31.ogg','sfx32.ogg','sfx33.ogg','sfx34.ogg', 'sfx35.ogg','sfx36.ogg','sfx37.ogg','sfx38.ogg','sfx39.ogg','sfx40.ogg','sfx41.ogg','sfx42.ogg','sfx43.ogg','sfx44.ogg','sfx45.ogg','sfx46.ogg','sfx47.ogg','sfx48.ogg','sfx49.ogg','sfx50.ogg','sfx51.ogg','sfx52.ogg','sfx53.ogg','sfx54.ogg','sfx55.ogg','sfx56.ogg','sfx57.ogg','sfx58.ogg','sfx58.ogg','sfx59.ogg','sfx60.ogg'];
 
 for(let i=0;i<9;i++){
   const btn=document.createElement('div');
