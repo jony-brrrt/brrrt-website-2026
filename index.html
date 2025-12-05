@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title>BRRRT! — Site</title>
 
+<!-- ================= FIREBASE SCRIPTS (COMPAT VERSION) ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
@@ -114,6 +115,7 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer; /* Added pointer to show it's clickable */
 }
 
 /* Icon Animation Keyframes */
@@ -438,10 +440,14 @@ input:checked + .slider:before {
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
 <section id="page1">
+  <!-- HEADER ROW: Theme Icon Left, Toggle Right -->
   <div class="top-header">
+      <!-- Theme Icon Container (Sun/Moon) -->
       <div id="theme-icon-container">
-          </div>
+          <!-- Icon injected by JS -->
+      </div>
 
+      <!-- Toggle Switch -->
       <div class="theme-switch-wrapper">
         <span class="theme-switch-text" id="theme-label">Light Mode</span>
         <label class="theme-switch" for="checkbox">
@@ -516,6 +522,7 @@ input:checked + .slider:before {
   </div>
   <img class="page3-photo" src="contact-photo.png" alt="Contact photo">
   
+  <!-- Updated Contact Section with Flex Wrap -->
   <div style="
     display:flex; 
     flex-wrap: wrap; 
@@ -527,6 +534,7 @@ input:checked + .slider:before {
     max-width:420px;
   ">
     
+    <!-- Instagram Component -->
     <div style="display:flex; align-items:center; gap:10px;">
       <span style="
           font-family:'KomikaText', sans-serif; 
@@ -535,10 +543,12 @@ input:checked + .slider:before {
           text-align: right; 
       ">instagram</span>
       <a href="https://www.instagram.com/brrrt.audio/" target="_blank" rel="noopener" class="control-btn" style="width:48px; height:48px; min-width:48px; font-size:22px; padding:0; display:flex; align-items:center; justify-content:center; text-decoration:none; color:var(--btn-text);">
+        <!-- SVG Icon: Instagram Camera -->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
       </a>
     </div>
 
+    <!-- Email Copy Component -->
     <div style="display:flex; align-items:center; gap:10px;">
       <span id="copyFeedback" style="
           font-family:'KomikaText', sans-serif; 
@@ -1422,6 +1432,16 @@ function switchTheme(e) {
 }
 
 toggleSwitch.addEventListener('change', switchTheme);
+
+// 3. Icon Click Handler (Also Toggles Switch)
+iconContainer.addEventListener('click', () => {
+    // Flip the switch state programmatically
+    toggleSwitch.checked = !toggleSwitch.checked;
+    
+    // Manually trigger the logic (because changing .checked via JS doesn't fire 'change' event automatically)
+    // We create a fake event object to pass to switchTheme
+    switchTheme({ target: toggleSwitch });
+});
 
 
 /* ================= INITIALIZATION ================= */
