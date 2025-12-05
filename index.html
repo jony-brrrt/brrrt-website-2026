@@ -74,7 +74,9 @@
 
 /* base - Applying KomikaText to everything by default */
 html,body{
-  height:100%; margin:0;
+  /* FIX: Changed height to min-height to ensure window scrolling works correctly */
+  min-height:100%; 
+  margin:0;
   background:var(--bg); 
   color:var(--text-main); 
   font-family: 'Courier New', Arial, Helvetica, sans-serif;
@@ -114,7 +116,6 @@ section{
 .top-header {
     width: 100%;
     display: flex;
-    /* Aligns the icon to the right, replacing the toggle position */
     justify-content: flex-end; 
     align-items: center;
     padding: 20px 60px 0 60px; 
@@ -133,7 +134,6 @@ section{
     justify-content: center;
     cursor: pointer;
     transition: color 0.3s ease;
-    /* Ensure it has a click target area */
     pointer-events: auto;
 }
 
@@ -144,11 +144,31 @@ section{
     100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-/* The class we add to trigger animation */
 .icon-enter {
     animation: iconPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
+/* Toggle Switch (Hidden) */
+.theme-switch-wrapper { display: none; }
+.theme-switch input { display: none; }
+
+/* ================= SCROLL ARROW ================= */
+#scroll-arrow {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-main);
+    animation: bounce 2s infinite;
+    opacity: 1;
+    pointer-events: none; 
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
 /* ======================================================= */
 
 /* Titles using KOMIKAGL */
@@ -184,7 +204,6 @@ section{
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Remove border in dark mode for cleaner look, or keep it subtle */
 [data-theme="dark"] .control-btn { border-color: #202225; }
 
 .hidden{ visibility:hidden; opacity:0; pointer-events:none; }
@@ -283,26 +302,43 @@ section{
 }
 /* ----------------------------- */
 
-/* SFX block */
+/* SFX block (SCALED DOWN) */
 .sfx-block{margin-top:12px;display:flex;flex-direction:column;align-items:center;width:100%}
-#sfx-grid-inner{display:grid;grid-template-columns:repeat(3,80px);grid-gap:10px;justify-content:center;margin-top:12px}
-.sfx-button{
-  width:80px;height:80px;border-radius:8px;
-  background:var(--sfx-bg);
-  border:2px solid var(--sfx-border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;cursor:pointer;user-select:none;position:relative;
-  color:var(--text-main);
-  font-family: 'KomikaTitle', sans-serif;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+/* Desktop Grid: 55px squares, 8px gap */
+#sfx-grid-inner {
+    display:grid;
+    grid-template-columns:repeat(3, 55px);
+    grid-gap: 8px;
+    justify-content:center;
+    margin-top:12px
 }
+
+/* Desktop Buttons */
+.sfx-button {
+    width: 55px;
+    height: 55px;
+    border-radius:8px;
+    background:var(--sfx-bg);
+    border:2px solid var(--sfx-border);
+    display:flex;align-items:center;justify-content:center;
+    font-size: 12px; /* Smaller font */
+    cursor:pointer;user-select:none;position:relative;
+    color:var(--text-main);
+    font-family: 'KomikaTitle', sans-serif;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
 .sfx-number{position:absolute;top:6px;left:50%;transform:translateX(-50%);pointer-events:none;font-weight:normal;font-size:14px; opacity:0.6;}
 .sfx-button:active{transform:scale(0.97);background:var(--accent); color:#fff; border-color:var(--accent);}
 
 /* Staggered Animation Class */
 .flash-red { animation: flickerRed 0.2s ease-out forwards; }
 
-#refreshButton{margin-top:12px;padding:8px 16px;font-size:14px;background:var(--btn);color:var(--btn-text);border:1px solid #ccc;border-radius:8px;cursor:pointer; font-family: 'KomikaText', sans-serif;}
+#refreshButton{
+    margin-top:10px; /* Reduced margin */
+    padding:8px 16px;font-size:14px;background:var(--btn);color:var(--btn-text);border:1px solid #ccc;border-radius:8px;cursor:pointer; font-family: 'KomikaText', sans-serif;
+}
 
 /* PAGE 2 & 3 Styles */
 #page2, #page3 { 
@@ -311,7 +347,6 @@ section{
   flex-direction:column; 
   align-items:center; 
   text-align:center; 
-  /* Updated to use Variables */
   background-color: var(--bg-page2); 
   transition: background-color 0.3s ease;
 }
@@ -334,9 +369,7 @@ section{
   position:relative;
   width:100%;
   overflow:hidden;
-  /* 💥 FIX 1: INCREASED HEIGHT for breathing room 💥 */
   height:200px; 
-  /* 💥 FIX 2: ADDED PADDING (top margin) 💥 */
   margin-top:100px; 
   display:flex;
   align-items:center;
@@ -351,14 +384,12 @@ section{
   will-change: transform; 
 }
 
-/* 💥 FIX 3: Ensure logos scale proportionally and don't touch the top/bottom of the inner container 💥 */
 #partners-strip-inner img{
-  height:60px; /* Reduced height relative to the 100px container */
+  height:60px; 
   width: auto; 
   object-fit: contain; 
   margin:0 32px;
   display:inline-block;
-  /* Apply theme filter (invert for dark mode) */
   filter: var(--logo-filter);
   transition: filter 0.3s ease;
 }
@@ -373,30 +404,25 @@ section{
   .page2-text{ text-align:left; font-size:14px; }
   .title-main{font-size:24px}
   #jog-wheel{width:100px;height:100px}
-  #sfx-grid-inner{grid-template-columns:repeat(3,72px);grid-gap:8px}
-  .sfx-button{width:72px;height:72px;font-size:14px}
+  
+  /* Mobile SFX Grid: 48px squares, 6px gap */
+  #sfx-grid-inner {
+      grid-template-columns:repeat(3, 48px);
+      grid-gap: 6px;
+  }
+  .sfx-button{
+      width:48px;
+      height:48px;
+      font-size:12px;
+  }
+  
   .control-btn{width:72px;font-size:13px;padding:6px}
   #trackName{font-size:16px}
   
-  /* 💥 MOBILE FIX: Ensure logos scale proportionally and don't touch the top/bottom 💥 */
-  #partners-strip{
-    height: 80px; /* Slightly reduced height on mobile */
-    margin-top: 30px; /* Reduced margin on mobile */
-  }
+  #partners-strip{ height: 80px; margin-top: 30px; }
+  #partners-strip-inner img{ height:48px; margin:0 24px; }
   
-  #partners-strip-inner img{
-    height:48px; /* Reduced logo height relative to 80px container */
-    width: auto; 
-    object-fit: contain; 
-    margin:0 24px
-  }
-  
-  /* Waveform on small screens */
-  #waveformContainer {
-    height: 30px; /* Adjusted smaller height on mobile */
-  }
-  
-  /* Adjust header padding on mobile */
+  #waveformContainer { height: 30px; }
   .top-header { padding: 10px 20px 0 20px; }
 }
 </style>
@@ -407,6 +433,11 @@ section{
   <div class="top-header">
       <div id="theme-icon-container" aria-label="Toggle Dark Mode">
           </div>
+      <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+        </label>
+      </div>
   </div>
 
   <div style="text-align:center;">
@@ -445,6 +476,10 @@ section{
       <div id="sfx-grid-inner"></div>
       <button id="refreshButton" aria-label="Refresh SFX">Reload</button>
     </div>
+  </div>
+
+  <div id="scroll-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
   </div>
 </section>
 
@@ -538,14 +573,13 @@ section{
 
 <script>
 /* ================= SECURITY SHIELD ================= */
-// Prevent Key Combinations for Save/Inspect
 document.onkeydown = function(e) {
-    if (e.keyCode == 123) { return false; } // Block F12
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Block Ctrl+Shift+I
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Block Ctrl+Shift+C
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Block Ctrl+Shift+J
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Block Ctrl+U
-    if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; } // Block Ctrl+S
+    if (e.keyCode == 123) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; } 
 };
 
 /* ================= SYSTEM INIT ================= */
@@ -595,10 +629,10 @@ let lastPointerX = 0;
 let lastTimestamp = performance.now(); // Initialized here for the main loop
 
 /* --- WAVEFORM VARIABLES --- */
-let waveformPeaks = []; // Stores the calculated peak data for drawing
+let waveformPeaks = []; 
 const canvas = document.getElementById('waveformCanvas');
 const ctx = canvas.getContext('2d');
-const DENSITY_FACTOR = 6; // <--- NEW: Controls the visual density (4 means 4 pixels of data are aggregated into one peak)
+const DENSITY_FACTOR = 6; 
 /* -------------------------- */
 
 /* DOM */
@@ -708,7 +742,7 @@ function getNextTrackFromQueue() {
     return trackQueue.pop(); 
 }
 
-/* ================= WAVEFORM CALCULATION AND DRAWING (UPDATED FOR DENSITY) ================= */
+/* ================= WAVEFORM CALCULATION AND DRAWING ================= */
 
 function getWaveformPeaks(audioBuffer, width) {
     if (!audioBuffer) return [];
@@ -716,25 +750,16 @@ function getWaveformPeaks(audioBuffer, width) {
     const data = audioBuffer.getChannelData(0); 
     const totalSamples = data.length;
     const peaks = [];
-    
-    // Calculate the number of visual peaks we actually want to draw, controlled by DENSITY_FACTOR.
     const numPeaksToDraw = Math.ceil(width / DENSITY_FACTOR); 
-    
-    // Number of samples to process per final *visual peak*.
     const samplesPerPeak = totalSamples / numPeaksToDraw; 
     
     for (let i = 0; i < numPeaksToDraw; i++) {
         const startSample = Math.floor(i * samplesPerPeak);
         const endSample = Math.floor((i + 1) * samplesPerPeak);
-        
         let maxPeak = 0;
-        
-        // Find the maximum absolute peak within this window
         for (let j = startSample; j < endSample; j++) {
             const sample = Math.abs(data[j]);
-            if (sample > maxPeak) {
-                maxPeak = sample;
-            }
+            if (sample > maxPeak) maxPeak = sample;
         }
         peaks.push(maxPeak);
     }
@@ -747,14 +772,12 @@ function drawWaveform() {
         return;
     }
     
-    // Match canvas dimensions to actual visible dimensions
     const width = canvas.offsetWidth;
     const height = canvas.offsetHeight;
     
     if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
-        // Recalculate peaks if the width changes (e.g., screen rotation)
         waveformPeaks = getWaveformPeaks(audioBuffer, width); 
     }
     
@@ -762,11 +785,7 @@ function drawWaveform() {
     
     const center = height / 2;
     const totalDuration = audioBuffer.duration;
-    
-    // Calculate the width of each bar on the canvas
     const peakBarWidth = width / waveformPeaks.length; 
-    
-    // Calculate the X-coordinate for the current playhead time
     const playedX = Math.min(width, Math.max(0, (playHeadTime / totalDuration) * width)); 
 
     ctx.beginPath();
@@ -777,10 +796,8 @@ function drawWaveform() {
     ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--waveform-fill');
     
     for (let i = 0; i < waveformPeaks.length; i++) {
-        // Calculate X position based on the new peak width
         const x = i * peakBarWidth; 
         const peak = waveformPeaks[i];
-        // Scale peak from 0-1 to 0-half height, with a min size
         const barHeight = Math.max(1, peak * height * 0.9); 
         
         ctx.moveTo(x, center - barHeight / 2);
@@ -793,7 +810,6 @@ function drawWaveform() {
     
     ctx.beginPath();
     for (let i = 0; i < waveformPeaks.length; i++) {
-        // Stop drawing the progress if we hit the play head
         const x = i * peakBarWidth; 
         if (x > playedX) break; 
         
@@ -817,10 +833,9 @@ async function loadTrack(trackObject){
   
   const underscoreFilename = filenameNoExt.replace(/ /g, '_');
   const pathsToTry = [
-      `visual/album_art/${underscoreFilename}.png`,      // Try "Day_Of_The_Raid.png"
-      `visual/album_art/${filenameNoExt}.png`,           // Try "Day Of The Raid.png"
-      `visual/album_art/${encodeURIComponent(filenameNoExt)}.png`, // Try "Day%20Of%20The%20Raid.png"
-      /* ADDED LOWERCASE CHECKS FOR SERVER COMPATIBILITY */
+      `visual/album_art/${underscoreFilename}.png`,      
+      `visual/album_art/${filenameNoExt}.png`,           
+      `visual/album_art/${encodeURIComponent(filenameNoExt)}.png`,
       `visual/album_art/${underscoreFilename.toLowerCase()}.png`, 
       `visual/album_art/${filenameNoExt.toLowerCase()}.png`,
       `visual/album_art/${encodeURIComponent(filenameNoExt.toLowerCase())}.png`
@@ -833,78 +848,45 @@ async function loadTrack(trackObject){
           albumArtImg.style.display = 'none'; 
           return;
       }
-      
       const currentPath = pathsToTry[pathIndex];
-      
-      albumArtImg.onload = () => {
-          albumArtImg.style.display = 'block'; 
-      };
-      
-      albumArtImg.onerror = () => {
-          pathIndex++;
-          attemptLoad();
-      };
-
+      albumArtImg.onload = () => { albumArtImg.style.display = 'block'; };
+      albumArtImg.onerror = () => { pathIndex++; attemptLoad(); };
       albumArtImg.src = currentPath;
   }
   
   attemptLoad();
-  // ... (End Album Art loading logic) ...
 
   try{
     trackNameDiv.textContent = ""; 
-
     const r=await fetch(url);
     const ab=await r.arrayBuffer();
     audioBuffer=await audioContext.decodeAudioData(ab);
-    
-    // --- ANIMATION UPDATE ---
-    // 1. Remove class to reset
     trackNameDiv.classList.remove('fade-in');
-    
-    // 2. Force reflow (browser magic to restart animation)
     void trackNameDiv.offsetWidth;
-    
-    // 3. Set text
     trackNameDiv.textContent = trackObject.display;
-    
-    // 4. Add class to start animation
     trackNameDiv.classList.add('fade-in');
-    // -------------------------
-
     currentTrack = trackObject;
     updateLikeButton();
-    
     lastPlayedTrackUrl = trackObject.url; 
-    
-    // --- NEW: Generate waveform peaks after buffer loads ---
-    // Use the *current* width of the canvas element
     waveformPeaks = getWaveformPeaks(audioBuffer, canvas.offsetWidth); 
-    drawWaveform(); // Initial draw
-    // ------------------------------------------------------
-    
+    drawWaveform(); 
   }catch(e){
     console.error('loadTrack failed for URL:', url, 'Error:', e); 
     trackNameDiv.textContent="Error loading track"; 
     audioBuffer = null;
     waveformPeaks = [];
-    drawWaveform(); // Clear canvas on error
+    drawWaveform(); 
   }
 }
 
 function startSource(startTimeOffset) {
-  if(source) { 
-    try{source.stop();}catch(e){} 
-    source=null; 
-  }
-  
+  if(source) { try{source.stop();}catch(e){} source=null; }
   const s = audioContext.createBufferSource();
   s.buffer = audioBuffer;
   s.connect(musicGain);
   s.loop = false;
   s.start(0, startTimeOffset);
   s.onended = () => {
-    // Check if the source ended naturally (not from a manual stop or speed change)
     if(isPlaying && audioBuffer && (playHeadTime >= audioBuffer.duration - 0.1)) {
        playNext(); 
     }
@@ -913,19 +895,13 @@ function startSource(startTimeOffset) {
 }
 
 function startRamp() {
-  if (source && source.playbackRate) {
-    source.playbackRate.value = 0.001; 
-  }
+  if (source && source.playbackRate) { source.playbackRate.value = 0.001; }
   targetVelocity = 1.0; 
 }
 
 function playAudio() {
   if(!audioBuffer) return; 
-  
-  if (!source) {
-      source = startSource(playHeadTime);
-  } 
-  
+  if (!source) { source = startSource(playHeadTime); } 
   isPlaying = true;
   playButton.textContent = 'Pause';
   nextButton.classList.remove('hidden');
@@ -945,25 +921,12 @@ function pauseAudio() {
 
 async function playNext(){
   const wasPlaying = isPlaying;
-  
-  if(source) {
-    try { source.stop(); } catch(e) {}
-    source = null; 
-  }
-  
+  if(source) { try { source.stop(); } catch(e) {} source = null; }
   currentTrack = getNextTrackFromQueue(); 
-
   currentVelocity = 0;
   playHeadTime = 0;
-  
   await loadTrack(currentTrack);
-  
-  if (wasPlaying) {
-      playAudio(); 
-      startRamp();
-  } else {
-      playButton.textContent = 'Play'; 
-  }
+  if (wasPlaying) { playAudio(); startRamp(); } else { playButton.textContent = 'Play'; }
 }
 
 async function loadRandomTrack() {
@@ -971,7 +934,7 @@ async function loadRandomTrack() {
     await loadTrack(currentTrack);
 }
 
-/* ================= VINYL PHYSICS LOOP (UPDATED for waveform draw) ================= */
+/* ================= VINYL PHYSICS LOOP ================= */
 
 function updatePhysics() {
   const now = performance.now();
@@ -980,12 +943,9 @@ function updatePhysics() {
 
   if(!audioBuffer) {
     requestAnimationFrame(updatePhysics);
-    // Draw an empty or "loading" waveform
     drawWaveform(); 
     return;
   }
-
-  // ... (Velocity and Play Head Time logic remains the same) ...
 
   if (isScrubbing) {
     const lerpFactor = 0.5; 
@@ -1007,24 +967,14 @@ function updatePhysics() {
 
   if (Math.abs(currentVelocity) > 0.005) { 
     playHeadTime += Math.max(0, currentVelocity) * dt;
-    if(playHeadTime < 0) {
-       playHeadTime = 0;
-       currentVelocity = 0; 
-    }
-    if(audioBuffer && playHeadTime > audioBuffer.duration) { 
-       playHeadTime = audioBuffer.duration;
-       currentVelocity = 0; 
-    }
+    if(playHeadTime < 0) { playHeadTime = 0; currentVelocity = 0; }
+    if(audioBuffer && playHeadTime > audioBuffer.duration) { playHeadTime = audioBuffer.duration; currentVelocity = 0; }
   }
 
   // Visuals
   wheelRotation += (currentVelocity * 140) * dt;
   jogWheel.style.transform = `rotate(${wheelRotation}deg)`;
-  
-  // --- Draw the waveform ---
   drawWaveform(); 
-  // -----------------------------
-
   requestAnimationFrame(updatePhysics);
 }
 
@@ -1040,13 +990,7 @@ jogWheel.addEventListener('pointerdown', async (e) => {
   isHolding = true;
   lastPointerX = e.clientX;
   targetVelocity = 0; 
-  
-  if (audioBuffer && !source) {
-    source = startSource(playHeadTime); 
-    if (source.playbackRate) {
-        source.playbackRate.value = 0;
-    }
-  }
+  if (audioBuffer && !source) { source = startSource(playHeadTime); if (source.playbackRate) source.playbackRate.value = 0; }
 });
 
 window.addEventListener('pointermove', (e) => {
@@ -1054,30 +998,21 @@ window.addEventListener('pointermove', (e) => {
   e.preventDefault();
   const dx = e.clientX - lastPointerX;
   lastPointerX = e.clientX;
-  const sensitivity = 0.15; 
-  targetVelocity = dx * sensitivity; 
+  targetVelocity = dx * 0.15; 
 });
 
 window.addEventListener('pointerup', (e) => {
   if (!isScrubbing) return;
   isScrubbing = false;
   isHolding = false;
-  if(playButton.textContent === 'Pause') { 
-    targetVelocity = 1;
-  }
+  if(playButton.textContent === 'Pause') { targetVelocity = 1; }
 });
 
 
 /* ================= CONTROLS ================= */
 playButton.addEventListener('click',async()=>{
   if(audioContext.state === 'suspended') await audioContext.resume();
-  
-  if(!isPlaying) {
-      playAudio();
-      startRamp();
-  } else {
-      pauseAudio();
-  }
+  if(!isPlaying) { playAudio(); startRamp(); } else { pauseAudio(); }
 });
 
 nextButton.addEventListener('click',async()=>{
@@ -1091,38 +1026,23 @@ volumeSlider.addEventListener('input',e=>{
   localStorage.setItem('brrrt_music_volume',String(v));
 });
 
-/* ================= LIKE BUTTON (UPDATED FOR FIREBASE) ================= */
+/* ================= LIKE BUTTON (FIREBASE) ================= */
 likeButton.addEventListener('click', async () => {
   const url = currentTrack.url;
-  
-  // 1. Toggle Local State
   likes[url] = !likes[url];
   localStorage.setItem('trackLikes', JSON.stringify(likes));
   updateLikeButton();
 
-  // 2. Update Firebase
   const trackName = currentTrack.display;
-  
-  // Reference to the 'songs' collection and a document named after the track
   const trackRef = db.collection("songs").doc(trackName);
 
   try {
       if (likes[url]) {
-          // If User Liked -> Increment +1
-          await trackRef.set({
-              likes: firebase.firestore.FieldValue.increment(1)
-          }, { merge: true });
-          console.log("Firebase: +1 like sent for", trackName);
+          await trackRef.set({ likes: firebase.firestore.FieldValue.increment(1) }, { merge: true });
       } else {
-          // If User Unliked -> Increment -1
-          await trackRef.set({
-              likes: firebase.firestore.FieldValue.increment(-1)
-          }, { merge: true });
-          console.log("Firebase: -1 like sent for", trackName);
+          await trackRef.set({ likes: firebase.firestore.FieldValue.increment(-1) }, { merge: true });
       }
-  } catch (error) {
-      console.error("Error updating likes in Firebase:", error);
-  }
+  } catch (error) { console.error("Error updating likes:", error); }
 });
 
 function updateLikeButton(){
@@ -1194,15 +1114,9 @@ document.getElementById('refreshButton').addEventListener('click', async()=>{
   refreshSFX();
 });
 
-/* ================= PARTNERS STRIP LOGIC (Infinite Loop) ================= */
-
+/* ================= PARTNERS STRIP LOGIC ================= */
 const partnersInner=document.getElementById('partners-strip-inner');
 const partnersStrip = document.getElementById('partners-strip');
-const partnerFiles = [
-    'icy_ghost.png', 'sneakyp.png', 'microsoft.png', 
-    'scopely.png', 'lootheads.png', 'whalo.png', 'hearsay.png', 'glaive.png', 'okami.png', 'playspark.png', 'parana.png', 'uni.png', 'candivore.png', 'lineup.png', 'obscure.png', 'jelly.png', 'heimdall.png'
-];
-
 let isStripScrubbing = false;
 let stripPosition = 0; 
 let stripVelocity = 0; 
@@ -1211,83 +1125,43 @@ let lastStripPointerX = 0;
 let lastStripTimestamp = performance.now();
 let setWidthPx = 0; 
 
-
 function updateStripPhysics() {
   const now = performance.now();
   const dt = (now - lastStripTimestamp) / 1000; 
   lastStripTimestamp = now;
-
-  if (setWidthPx === 0) {
-      requestAnimationFrame(updateStripPhysics);
-      return;
+  if (setWidthPx === 0) { requestAnimationFrame(updateStripPhysics); return; }
+  if (!isStripScrubbing) {
+    const diff = stripStartRate - stripVelocity;
+    if (Math.abs(diff) > 0.1) { stripVelocity += diff * (dt * 5.0); } else { stripVelocity = stripStartRate; }
   }
-  
-  if (isStripScrubbing) {
-    // If scrubbing, position is updated directly in pointermove
-  } else {
-    // If not scrubbing, smoothly return velocity to the default auto-scroll rate
-    const target = stripStartRate; 
-    const inertia = 5.0; 
-    const diff = target - stripVelocity;
-    
-    if (Math.abs(diff) > 0.1) {
-      stripVelocity += diff * (dt * inertia);
-    } else {
-      stripVelocity = target; 
-    }
-  }
-  
-  // Update position based on velocity
   stripPosition += stripVelocity * dt;
-
-  // 💥 SEAMLESS LOOPING LOGIC 💥
-  if (stripPosition < -setWidthPx) {
-      stripPosition += setWidthPx; 
-  } else if (stripPosition > 0) {
-      stripPosition -= setWidthPx; 
-  }
-  
-  // Apply the position visually: translate3d is used for hardware acceleration
+  if (stripPosition < -setWidthPx) { stripPosition += setWidthPx; } else if (stripPosition > 0) { stripPosition -= setWidthPx; }
   partnersInner.style.transform = `translate3d(${stripPosition}px, -50%, 0)`;
-
   requestAnimationFrame(updateStripPhysics);
 }
 
 function setupPartnersStrip() {
-    // Get the HTML content of the initial set of logos
     const logoSet = partnersInner.innerHTML;
-    
-    // Duplicate the logos to create the seamless loop effect
     partnersInner.innerHTML = logoSet + logoSet; 
-
-    // Measure the width of one full set of logos
     let totalWidth = 0;
     const firstSetChildren = partnersInner.children.length / 2;
     for(let i = 0; i < firstSetChildren; i++) {
         const child = partnersInner.children[i];
-        
         if (child.offsetWidth > 0) {
             const style = getComputedStyle(child);
-            // Must account for the explicit margins (32px on each side)
             totalWidth += child.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
         } else {
-            console.warn("Partner logo width is zero, re-attempting measurement.");
             setTimeout(setupPartnersStrip, 200); 
             return;
         }
     }
-    
     setWidthPx = totalWidth;
-    
-    // Ensure the track starts scrolling automatically
     stripVelocity = stripStartRate; 
     requestAnimationFrame(updateStripPhysics); 
 }
 
-// Partner Strip Drag Handlers
 partnersStrip.addEventListener('pointerdown', (e) => {
     if (setWidthPx === 0) return;
-    
     e.preventDefault(); 
     partnersStrip.setPointerCapture(e.pointerId);
     isStripScrubbing = true;
@@ -1300,73 +1174,98 @@ window.addEventListener('pointermove', (e) => {
   e.preventDefault();
   const dx = e.clientX - lastStripPointerX;
   lastStripPointerX = e.clientX;
-  
-  // Directly update position based on drag movement
   stripPosition += dx;
-  
-  // Apply the position visually immediately during drag 
   partnersInner.style.transform = `translate3d(${stripPosition}px, -50%, 0)`;
 });
 
 window.addEventListener('pointerup', (e) => {
     if (!isStripScrubbing) return;
     isStripScrubbing = false;
-    // Physics loop takes over and ramps back to stripStartRate
 });
 
 
 /* ================= COPY TO CLIPBOARD ================= */
-// REPLACE THIS WITH YOUR ACTUAL EMAIL ADDRESS
 const myEmail = "jony@brrrt.audio"; 
-
 const copyEmailBtn = document.getElementById('copyEmailBtn');
 const copyFeedback = document.getElementById('copyFeedback');
-
 if(copyEmailBtn){
     copyEmailBtn.addEventListener('click', ()=>{
-        navigator.clipboard.writeText(myEmail).then(()=>{
-            copyFeedback.textContent = "copied!";
-        });
+        navigator.clipboard.writeText(myEmail).then(()=>{ copyFeedback.textContent = "copied!"; });
     });
 }
 
 /* ================= DARK MODE LOGIC ================= */
-// SVGs for the icons
 const sunSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
 const moonSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
 
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const iconContainer = document.getElementById('theme-icon-container');
-const currentTheme = localStorage.getItem('theme') || 'light';
+const currentTheme = localStorage.getItem('theme');
 
-// Helper to update icon with animation
-function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+function updateThemeIcon(theme) {
     iconContainer.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
-    
-    // Trigger Reflow for Animation
     iconContainer.classList.remove('icon-enter');
     void iconContainer.offsetWidth; // Force reflow
     iconContainer.classList.add('icon-enter');
 }
 
-// 1. Init Theme on Load
-applyTheme(currentTheme);
+// 1. Check for saved preference
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'dark') {
+        toggleSwitch.checked = true;
+        updateThemeIcon('dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        updateThemeIcon('light');
+    }
+} else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    updateThemeIcon('light');
+}
 
-// 2. Icon Click Handler (Toggle Logic)
+// 2. Toggle Handler
+function switchTheme(e) {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeIcon('dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        updateThemeIcon('light');
+    }
+}
+
+toggleSwitch.addEventListener('change', switchTheme);
+
+// 3. Icon Click Handler (Simulates Toggle Click)
 iconContainer.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
+    toggleSwitch.click(); 
 });
 
+/* ================= SCROLL FADE ARROW ================= */
+// Use a robust scroll check
+function getScrollTop() {
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+}
+
+window.addEventListener('scroll', () => {
+    const arrow = document.getElementById('scroll-arrow');
+    if (!arrow) return;
+    
+    const scrollY = getScrollTop();
+    const fadePoint = 300; 
+    let opacity = 1 - (scrollY / fadePoint);
+    if (opacity < 0) opacity = 0;
+    arrow.style.opacity = opacity;
+});
 
 /* ================= INITIALIZATION ================= */
-// Call the setup function after all code is parsed
 window.addEventListener('load', () => {
   loadRandomTrack();
   refreshSFX();
-  setupPartnersStrip(); // Start the partner strip setup and animation
+  setupPartnersStrip(); 
 });
 </script>
 </body>
