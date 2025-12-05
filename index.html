@@ -4,6 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title>BRRRT! — Site</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
 <style>
 /* ================= FONTS ================= */
 @font-face {
@@ -95,7 +100,8 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
     display: flex;
     justify-content: flex-end; /* Aligns toggle to the right */
     align-items: center;
-    padding: 20px 60px 0 20px; /* Top, Right, Bottom, Left Padding */
+    /* Adjusted padding as requested: Top, Right, Bottom, Left */
+    padding: 20px 60px 0 20px; 
     margin-bottom: 20px; /* Push the rest of the content down */
     box-sizing: border-box;
 }
@@ -562,6 +568,24 @@ const AudioCtx = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioCtx();
 const musicGain = audioContext.createGain();
 musicGain.connect(audioContext.destination);
+
+/* ================= FIREBASE INIT ================= */
+// YOUR ACTUAL FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyDebtA94th7vA4dNOCVBgHnzG07_UaSkmM",
+  authDomain: "brrrt-audio.firebaseapp.com",
+  projectId: "brrrt-audio",
+  storageBucket: "brrrt-audio.firebasestorage.app",
+  messagingSenderId: "280094161378",
+  appId: "1:280094161378:web:c20952c2c40b23db4461bb",
+  measurementId: "G-SN37YNEW66"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const analytics = firebase.analytics();
+/* ================================================= */
 
 /* Persistence */
 const savedVolume = localStorage.getItem('brrrt_music_volume')!==null ? parseFloat(localStorage.getItem('brrrt_music_volume')) : 0.8;
@@ -1082,11 +1106,40 @@ volumeSlider.addEventListener('input',e=>{
   localStorage.setItem('brrrt_music_volume',String(v));
 });
 
-likeButton.addEventListener('click',()=>{
-  likes[currentTrack.url]=!likes[currentTrack.url];
-  localStorage.setItem('trackLikes',JSON.stringify(likes));
+/* ================= LIKE BUTTON (UPDATED FOR FIREBASE) ================= */
+likeButton.addEventListener('click', async () => {
+  const url = currentTrack.url;
+  
+  // 1. Toggle Local State
+  likes[url] = !likes[url];
+  localStorage.setItem('trackLikes', JSON.stringify(likes));
   updateLikeButton();
+
+  // 2. Update Firebase
+  const trackName = currentTrack.display;
+  
+  // Reference to the 'songs' collection and a document named after the track
+  const trackRef = db.collection("songs").doc(trackName);
+
+  try {
+      if (likes[url]) {
+          // If User Liked -> Increment +1
+          await trackRef.set({
+              likes: firebase.firestore.FieldValue.increment(1)
+          }, { merge: true });
+          console.log("Firebase: +1 like sent for", trackName);
+      } else {
+          // If User Unliked -> Increment -1
+          await trackRef.set({
+              likes: firebase.firestore.FieldValue.increment(-1)
+          }, { merge: true });
+          console.log("Firebase: -1 like sent for", trackName);
+      }
+  } catch (error) {
+      console.error("Error updating likes in Firebase:", error);
+  }
 });
+
 function updateLikeButton(){
   const url = currentTrack ? currentTrack.url : '';
   likeButton.setAttribute('data-icon',likes[url]?'♥':'♡');
