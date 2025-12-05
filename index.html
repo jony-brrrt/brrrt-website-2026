@@ -95,7 +95,7 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
     display: flex;
     justify-content: flex-end; /* Aligns toggle to the right */
     align-items: center;
-    padding: 20px 20px 0 20px; /* Top, Right, Bottom, Left Padding */
+    padding: 20px 60px 0 20px; /* Top, Right, Bottom, Left Padding */
     margin-bottom: 20px; /* Push the rest of the content down */
     box-sizing: border-box;
 }
@@ -219,11 +219,8 @@ input:checked + .slider:before {
   overflow: hidden; 
 }
 #jog-wheel:active { cursor: grabbing; }
-#jog-wheel::after {
-  content:''; position:absolute; top:5px; left:50%; transform:translateX(-50%);
-  width:4px; height:15px; background:var(--accent); border-radius:2px;
-  z-index: 10; 
-}
+
+/* NEEDLE REMOVED FROM HERE */
 
 /* Album Art Style */
 #albumArt {
@@ -813,7 +810,11 @@ async function loadTrack(trackObject){
   const pathsToTry = [
       `visual/album_art/${underscoreFilename}.png`,      // Try "Day_Of_The_Raid.png"
       `visual/album_art/${filenameNoExt}.png`,           // Try "Day Of The Raid.png"
-      `visual/album_art/${encodeURIComponent(filenameNoExt)}.png` // Try "Day%20Of%20The%20Raid.png" (Fix for server spaces)
+      `visual/album_art/${encodeURIComponent(filenameNoExt)}.png`, // Try "Day%20Of%20The%20Raid.png"
+      /* ADDED LOWERCASE CHECKS FOR SERVER COMPATIBILITY */
+      `visual/album_art/${underscoreFilename.toLowerCase()}.png`, 
+      `visual/album_art/${filenameNoExt.toLowerCase()}.png`,
+      `visual/album_art/${encodeURIComponent(filenameNoExt.toLowerCase())}.png`
   ];
   
   let pathIndex = 0;
@@ -1278,7 +1279,7 @@ window.addEventListener('pointerup', (e) => {
 
 /* ================= COPY TO CLIPBOARD ================= */
 // REPLACE THIS WITH YOUR ACTUAL EMAIL ADDRESS
-const myEmail = "contact@brrrt.audio"; 
+const myEmail = "jony@brrrt.audio"; 
 
 const copyEmailBtn = document.getElementById('copyEmailBtn');
 const copyFeedback = document.getElementById('copyFeedback');
