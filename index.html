@@ -138,15 +138,15 @@ section{
     pointer-events: auto;
 }
 
-/* Icon Animation Keyframes */
+/* Icon Animation Keyframes - UPDATED WITH ROTATION */
 @keyframes iconPop {
-    0% { opacity: 0; transform: scale(0.5) rotate(-30deg); }
-    70% { transform: scale(1.1) rotate(5deg); }
-    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    0% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+    70% { transform: scale(1.1) rotate(20deg); } /* Swings to 20 degrees */
+    100% { opacity: 1; transform: scale(1) rotate(0deg); } /* Settles at 0 */
 }
 
 .icon-enter {
-    animation: iconPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* Toggle Switch (Hidden) */
