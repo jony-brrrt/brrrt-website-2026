@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -28,6 +28,9 @@
 :root{
   /* --- COLOR INVERSION (Light Mode) --- */
   --bg:#f2f2f2;       /* Light Gray Background */
+  --bg-page2: #e8e8e8; /* Slightly darker */
+  --bg-page3: #dedede; /* Even darker */
+  
   --text-main:#1a1a1a;/* Dark Text */
   --muted:#666666;    /* Medium Gray Muted Text */
   --accent:#ff4444;   /* Accent stays the same (Red) */
@@ -35,9 +38,33 @@
   --btn-text:#000;    /* Dark Button Text */
   --sfx-bg:#d0d0d0;   /* Light SFX Pad */
   --sfx-border:#b0b0b0;
+  
   /* --- New Waveform Colors --- */
   --waveform-fill: #b0b0b0; /* Unplayed Waveform Color */
   --waveform-progress: var(--accent); /* Played Waveform Color (Red Accent) */
+  
+  /* --- Logo Filter (Normal for Light Mode) --- */
+  --logo-filter: none; 
+}
+
+/* --- DARK MODE VARIABLES (Discord/Slack Style) --- */
+[data-theme="dark"] {
+  --bg: #202225;       /* Very Dark Gray (Discord Main) */
+  --bg-page2: #2f3136; /* Dark Gray (Discord Secondary) */
+  --bg-page3: #36393f; /* Dark Gray (Discord Chat) */
+  
+  --text-main: #dcddde;/* Off-White Text */
+  --muted: #b9bbbe;    /* Muted Light Gray */
+  --btn: #40444b;      /* Dark Button Background */
+  --btn-text: #ffffff; /* White Button Text */
+  --sfx-bg: #2f3136;   /* Dark SFX Pad */
+  --sfx-border: #202225;
+  
+  --waveform-fill: #4f545c; 
+  --waveform-progress: var(--accent);
+  
+  /* Invert black logos to white for dark mode */
+  --logo-filter: invert(1) grayscale(100%) brightness(1.5); 
 }
 
 /* base - Applying KomikaText to everything by default */
@@ -48,6 +75,7 @@ html,body{
   font-family: 'Courier New', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  transition: background 0.3s ease, color 0.3s ease; /* Smooth Theme Transition */
   
   /* --- SECURITY: Disable Selection --- */
   user-select: none;
@@ -56,10 +84,78 @@ html,body{
 *{box-sizing:border-box}
 
 /* global section layout */
-section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center; transition: background 0.3s ease;}
 
 /* PAGE 1 compact */
-#page1{padding-top:10px;padding-left:8px;padding-right:8px;}
+#page1{padding-top:0px;padding-left:8px;padding-right:8px; position: relative;}
+
+/* ================= HEADER ROW (Layout Fix) ================= */
+.top-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* Aligns toggle to the right */
+    align-items: center;
+    padding: 20px 20px 0 20px; /* Top, Right, Bottom, Left Padding */
+    margin-bottom: 20px; /* Push the rest of the content down */
+    box-sizing: border-box;
+}
+
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch-text {
+  margin-right: 10px;
+  font-family: 'KomikaText', sans-serif;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 50px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+  border-radius: 50%;
+}
+
+/* Checked State (Dark Mode) */
+input:checked + .slider {
+  background-color: var(--accent);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+/* ======================================================= */
 
 /* Titles using KOMIKAGL */
 .title-main {
@@ -91,7 +187,12 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   position:relative;
   overflow:visible; 
   font-family: 'KomikaText', sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
+/* Remove border in dark mode for cleaner look, or keep it subtle */
+[data-theme="dark"] .control-btn { border-color: #202225; }
+
 .hidden{ visibility:hidden; opacity:0; pointer-events:none; }
 #likeButton { display:inline-flex; align-items:center; justify-content:center; }
 #likeButton::after{ content: attr(data-icon); display:block; width:100%; text-align:center; font-size:16px; line-height:1; pointer-events:none; }
@@ -204,6 +305,7 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   font-size:16px;cursor:pointer;user-select:none;position:relative;
   color:var(--text-main);
   font-family: 'KomikaTitle', sans-serif;
+  transition: background 0.2s, border-color 0.2s;
 }
 .sfx-number{position:absolute;top:6px;left:50%;transform:translateX(-50%);pointer-events:none;font-weight:normal;font-size:14px; opacity:0.6;}
 .sfx-button:active{transform:scale(0.97);background:var(--accent); color:#fff; border-color:var(--accent);}
@@ -220,9 +322,10 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   flex-direction:column; 
   align-items:center; 
   text-align:center; 
-  background:#e8e8e8; /* Slightly darker than main bg to separate sections */
+  /* Updated to use Variables */
+  background: var(--bg-page2); 
 }
-#page3 { background:#dedede; }
+#page3 { background: var(--bg-page3); }
 
 /* Section Titles using KOMIKAGL */
 .page2-title, .page3-title { 
@@ -264,7 +367,10 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   width: auto; 
   object-fit: contain; 
   margin:0 32px;
-  display:inline-block
+  display:inline-block;
+  /* Apply theme filter (invert for dark mode) */
+  filter: var(--logo-filter);
+  transition: filter 0.3s ease;
 }
 
 
@@ -305,6 +411,17 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
 <section id="page1">
+  <!-- NEW HEADER ROW for breathing room -->
+  <div class="top-header">
+      <div class="theme-switch-wrapper">
+        <span class="theme-switch-text" id="theme-label">Light Mode</span>
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider"></div>
+        </label>
+      </div>
+  </div>
+
   <div style="text-align:center;">
     <div class="title-main">BRRRT¡</div>
     <div class="title-sub">audio studio</div>
@@ -369,9 +486,50 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
     </div> 
   </div>
   <img class="page3-photo" src="contact-photo.png" alt="Contact photo">
-  <a href="https://www.instagram.com/brrrt.audio/" target="_blank" rel="noopener" style="margin-top:12px">
-    <img src="instagram.png" alt="Instagram" style="width:48px;height:48px;margin-top:12px">
-  </a>
+  
+  <!-- Updated Contact Section with Flex Wrap -->
+  <div style="
+    display:flex; 
+    flex-wrap: wrap; 
+    align-items:center; 
+    justify-content:center; 
+    gap:16px; 
+    margin-top:12px; 
+    width:100%; 
+    max-width:420px;
+  ">
+    
+    <!-- Instagram Component -->
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="
+          font-family:'KomikaText', sans-serif; 
+          color:var(--muted); 
+          font-size:16px; 
+          text-align: right; 
+      ">instagram</span>
+      <a href="https://www.instagram.com/brrrt.audio/" target="_blank" rel="noopener" class="control-btn" style="width:48px; height:48px; min-width:48px; font-size:22px; padding:0; display:flex; align-items:center; justify-content:center; text-decoration:none; color:var(--btn-text);">
+        <!-- SVG Icon: Instagram Camera -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+    </div>
+
+    <!-- Email Copy Component -->
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span id="copyFeedback" style="
+          font-family:'KomikaText', sans-serif; 
+          color:var(--muted); 
+          font-size:16px; 
+          width: 150px; 
+          text-align: right; 
+          display: inline-block;
+      ">copy to clipboard</span>
+      <button id="copyEmailBtn" class="control-btn" style="width:48px; height:48px; min-width:48px; font-size:22px; padding:0; display:flex; align-items:center; justify-content:center;" aria-label="Copy Email">
+        ❐
+      </button>
+    </div>
+
+  </div>
+
   <div id="partners-strip">
     <div id="partners-strip-inner">
       <img src="visual/partners/icy_ghost.png" alt="Icy Ghost Logo">
@@ -518,7 +676,7 @@ const trackList=[
     { url: 'TP For My Townhall.ogg', display: 'TP For My Townhall' },
     { url: 'Trap Boy.ogg', display: 'Trap Boy' },
     { url: 'Saving Harold.ogg', display: 'Saving Harold' },
-    
+    { url: 'Day Of The Raid.ogg', display: 'Day Of The Raid' },
 ];
 
 let tracks = trackList.map(t => ({
@@ -1122,6 +1280,51 @@ window.addEventListener('pointerup', (e) => {
     isStripScrubbing = false;
     // Physics loop takes over and ramps back to stripStartRate
 });
+
+
+/* ================= COPY TO CLIPBOARD ================= */
+// REPLACE THIS WITH YOUR ACTUAL EMAIL ADDRESS
+const myEmail = "jony@brrrt.audio"; 
+
+const copyEmailBtn = document.getElementById('copyEmailBtn');
+const copyFeedback = document.getElementById('copyFeedback');
+
+if(copyEmailBtn){
+    copyEmailBtn.addEventListener('click', ()=>{
+        navigator.clipboard.writeText(myEmail).then(()=>{
+            copyFeedback.textContent = "copied!";
+        });
+    });
+}
+
+/* ================= DARK MODE LOGIC ================= */
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const themeLabel = document.getElementById('theme-label');
+const currentTheme = localStorage.getItem('theme');
+
+// 1. Check for saved preference
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'dark') {
+        toggleSwitch.checked = true;
+        themeLabel.textContent = "Dark Mode";
+    }
+}
+
+// 2. Toggle Handler
+function switchTheme(e) {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeLabel.textContent = "Dark Mode";
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeLabel.textContent = "Light Mode";
+    }
+}
+
+toggleSwitch.addEventListener('change', switchTheme);
 
 
 /* ================= INITIALIZATION ================= */
