@@ -69,7 +69,7 @@
   --waveform-progress: var(--accent);
   
   /* Invert black logos to white for dark mode */
-  --logo-filter: invert(1) grayscale(100%) brightness(1.5); 
+  --logo-filter: invert(1) grayscale(100%) brightness(1.5);
 }
 
 /* base - Applying KomikaText to everything by default */
@@ -94,18 +94,41 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
 /* PAGE 1 compact */
 #page1{padding-top:0px;padding-left:8px;padding-right:8px; position: relative;}
 
-/* ================= HEADER ROW (Layout Fix) ================= */
+/* ================= HEADER ROW ================= */
 .top-header {
     width: 100%;
     display: flex;
-    justify-content: flex-end; /* Aligns toggle to the right */
+    justify-content: space-between; /* Space between Icon (left) and Toggle (right) */
     align-items: center;
-    /* Adjusted padding as requested: Top, Right, Bottom, Left */
-    padding: 20px 60px 0 20px; 
-    margin-bottom: 20px; /* Push the rest of the content down */
+    padding: 20px 60px 0 60px; /* Top, Right, Bottom, Left Padding */
+    margin-bottom: 20px; 
     box-sizing: border-box;
+    height: 60px;
 }
 
+/* Theme Icon Container */
+#theme-icon-container {
+    width: 32px;
+    height: 32px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon Animation Keyframes */
+@keyframes iconPop {
+    0% { opacity: 0; transform: scale(0.5) rotate(-30deg); }
+    70% { transform: scale(1.1) rotate(5deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* The class we add to trigger animation */
+.icon-enter {
+    animation: iconPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Toggle Switch Wrapper */
 .theme-switch-wrapper {
   display: flex;
   align-items: center;
@@ -225,8 +248,6 @@ input:checked + .slider:before {
   overflow: hidden; 
 }
 #jog-wheel:active { cursor: grabbing; }
-
-/* NEEDLE REMOVED FROM HERE */
 
 /* Album Art Style */
 #albumArt {
@@ -408,6 +429,9 @@ input:checked + .slider:before {
   #waveformContainer {
     height: 30px; /* Adjusted smaller height on mobile */
   }
+  
+  /* Adjust header padding on mobile */
+  .top-header { padding: 10px 20px 0 20px; }
 }
 </style>
 </head>
@@ -415,6 +439,9 @@ input:checked + .slider:before {
 
 <section id="page1">
   <div class="top-header">
+      <div id="theme-icon-container">
+          </div>
+
       <div class="theme-switch-wrapper">
         <span class="theme-switch-text" id="theme-label">Light Mode</span>
         <label class="theme-switch" for="checkbox">
@@ -1346,9 +1373,23 @@ if(copyEmailBtn){
 }
 
 /* ================= DARK MODE LOGIC ================= */
+// SVGs for the icons
+const sunSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+const moonSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
 const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const themeLabel = document.getElementById('theme-label');
+const iconContainer = document.getElementById('theme-icon-container');
 const currentTheme = localStorage.getItem('theme');
+
+// Helper to update icon with animation
+function updateThemeIcon(theme) {
+    iconContainer.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
+    // Trigger Reflow for Animation
+    iconContainer.classList.remove('icon-enter');
+    void iconContainer.offsetWidth; // Force reflow
+    iconContainer.classList.add('icon-enter');
+}
 
 // 1. Check for saved preference
 if (currentTheme) {
@@ -1356,7 +1397,13 @@ if (currentTheme) {
     if (currentTheme === 'dark') {
         toggleSwitch.checked = true;
         themeLabel.textContent = "Dark Mode";
+        updateThemeIcon('dark');
+    } else {
+        updateThemeIcon('light');
     }
+} else {
+    // Default to light
+    updateThemeIcon('light');
 }
 
 // 2. Toggle Handler
@@ -1365,10 +1412,12 @@ function switchTheme(e) {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
         themeLabel.textContent = "Dark Mode";
+        updateThemeIcon('dark');
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
         themeLabel.textContent = "Light Mode";
+        updateThemeIcon('light');
     }
 }
 
