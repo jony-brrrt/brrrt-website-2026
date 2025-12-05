@@ -154,12 +154,24 @@ section{width:100%;min-height:100vh;display:flex;flex-direction:column;align-ite
   margin-top:12px;
   color:var(--muted);
   font-size:18px;
-  /* 🛑 FIX: Explicitly set a fixed height to prevent vertical jump */
-  height: 24px; /* Setting a fixed height slightly larger than font-size:18px for better spacing */
+  height: 24px; 
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Ensure opacity starts at 1 so initial empty state is fine */
+  opacity: 1;
 }
+
+/* --- NEW ANIMATION STYLES --- */
+@keyframes softFade {
+  0% { opacity: 0; transform: translateY(0px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: softFade 0.25s ease-out forwards;
+}
+/* ---------------------------- */
 
 /* --- NEW WAVEFORM STYLES (Updated for display-only) --- */
 #waveformContainer {
@@ -684,7 +696,20 @@ async function loadTrack(trackObject){
     const ab=await r.arrayBuffer();
     audioBuffer=await audioContext.decodeAudioData(ab);
     
+    // --- ANIMATION UPDATE ---
+    // 1. Remove class to reset
+    trackNameDiv.classList.remove('fade-in');
+    
+    // 2. Force reflow (browser magic to restart animation)
+    void trackNameDiv.offsetWidth;
+    
+    // 3. Set text
     trackNameDiv.textContent = trackObject.display;
+    
+    // 4. Add class to start animation
+    trackNameDiv.classList.add('fade-in');
+    // -------------------------
+
     currentTrack = trackObject;
     updateLikeButton();
     
