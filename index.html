@@ -140,10 +140,13 @@ section {
 /* ================= SCROLL ARROW ================= */
 #scroll-arrow {
     position: absolute;
-    bottom: 5vh;
+    bottom: 2vh;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--text-main);
+    
+    /* ▼ CHANGED: Uses the SFX button background color */
+    color: var(--sfx-bg); 
+    
     animation: bounce 2s infinite;
     opacity: 1;
     pointer-events: none; 
@@ -338,7 +341,7 @@ section {
   #partners-strip-inner img{ height:48px; margin:0 24px; }
   #waveformContainer { height: 20px; }
   .top-header { padding: 10px 20px 0 20px; }
-  #scroll-arrow { bottom: 10vh; }
+  #scroll-arrow { bottom: 2vh; }
 }
 </style>
 </head>
@@ -390,9 +393,11 @@ section {
     </div>
   </div>
 
-  <div id="scroll-arrow">
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
-  </div>
+ <div id="scroll-arrow">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 10l5 5 5-5"/>
+  </svg>
+</div>
 </section>
 
 <section id="page2">
