@@ -32,49 +32,44 @@
 
 :root{
   /* --- COLOR INVERSION (Light Mode) --- */
-  --bg:#f2f2f2;       /* Light Gray Background */
-  --bg-page2: #e8e8e8; /* Slightly darker */
-  --bg-page3: #dedede; /* Even darker */
+  --bg:#f2f2f2;       
+  --bg-page2: #e8e8e8; 
+  --bg-page3: #dedede; 
   
-  --text-main:#1a1a1a;/* Dark Text */
-  --muted:#666666;    /* Medium Gray Muted Text */
-  --accent:#ff4444;   /* Accent stays the same (Red) */
-  --btn:#e0e0e0;      /* Light Button Background */
-  --btn-text:#000;    /* Dark Button Text */
-  --sfx-bg:#d0d0d0;   /* Light SFX Pad */
+  --text-main:#1a1a1a;
+  --muted:#666666;    
+  --accent:#ff4444;   
+  --btn:#e0e0e0;      
+  --btn-text:#000;    
+  --sfx-bg:#d0d0d0;   
   --sfx-border:#b0b0b0;
   
-  /* --- New Waveform Colors --- */
-  --waveform-fill: #b0b0b0; /* Unplayed Waveform Color */
-  --waveform-progress: var(--accent); /* Played Waveform Color (Red Accent) */
+  --waveform-fill: #b0b0b0; 
+  --waveform-progress: var(--accent);
   
-  /* --- Logo Filter (Normal for Light Mode) --- */
   --logo-filter: none; 
 }
 
-/* --- DARK MODE VARIABLES (Discord/Slack Style) --- */
+/* --- DARK MODE VARIABLES --- */
 [data-theme="dark"] {
-  --bg: #202225;       /* Very Dark Gray (Discord Main) */
-  --bg-page2: #2f3136; /* Dark Gray (Discord Secondary) */
-  --bg-page3: #36393f; /* Dark Gray (Discord Chat) */
+  --bg: #202225;       
+  --bg-page2: #2f3136; 
+  --bg-page3: #36393f; 
   
-  --text-main: #dcddde;/* Off-White Text */
-  --muted: #b9bbbe;    /* Muted Light Gray */
-  --btn: #40444b;      /* Dark Button Background */
-  --btn-text: #ffffff; /* White Button Text */
-  --sfx-bg: #2f3136;   /* Dark SFX Pad */
+  --text-main: #dcddde;
+  --muted: #b9bbbe;    
+  --btn: #40444b;      
+  --btn-text: #ffffff; 
+  --sfx-bg: #2f3136;   
   --sfx-border: #202225;
   
   --waveform-fill: #4f545c; 
   --waveform-progress: var(--accent);
   
-  /* Invert black logos to white for dark mode */
   --logo-filter: invert(1) grayscale(100%) brightness(1.5);
 }
 
-/* base - Applying KomikaText to everything by default */
 html,body{
-  /* FIX: Changed height to min-height to ensure window scrolling works correctly */
   min-height:100%; 
   margin:0;
   background:var(--bg); 
@@ -82,33 +77,26 @@ html,body{
   font-family: 'Courier New', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
-  /* Smooth Theme Transition for background and text colors */
   transition: background-color 0.3s ease, color 0.3s ease;
-  
-  /* --- SECURITY: Disable Selection --- */
   user-select: none;
   -webkit-user-select: none;
 }
 *{box-sizing:border-box}
 
-/* global section layout */
 section{
     width:100%;
     min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center; 
-    /* Ensuring sections transition smoothly */
     transition: background-color 0.3s ease;
 }
 
-/* PAGE 1 compact */
 #page1{
-    padding-top:0px; /* Kept at 0 to raise content */
+    padding-top:0px; 
     padding-left:8px;
     padding-right:8px; 
     position: relative;
-    /* FIX: Force Page 1 to use the background variable explicitly */
     background-color: var(--bg);
 }
 
@@ -119,13 +107,11 @@ section{
     justify-content: flex-end; 
     align-items: center;
     padding: 20px 60px 0 60px; 
-    /* CHANGED: Removed bottom margin to allow title to rise up */
     margin-bottom: 0px; 
     box-sizing: border-box;
     height: 60px;
 }
 
-/* Theme Icon Container */
 #theme-icon-container {
     width: 32px;
     height: 32px;
@@ -138,25 +124,22 @@ section{
     pointer-events: auto;
 }
 
-/* Icon Animation Keyframes - UPDATED WITH ROTATION */
 @keyframes iconPop {
     0% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
-    70% { transform: scale(1.1) rotate(20deg); } /* Swings to 20 degrees */
-    100% { opacity: 1; transform: scale(1) rotate(0deg); } /* Settles at 0 */
+    70% { transform: scale(1.1) rotate(20deg); } 
+    100% { opacity: 1; transform: scale(1) rotate(0deg); } 
 }
 
 .icon-enter {
     animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* Toggle Switch (Hidden) */
 .theme-switch-wrapper { display: none; }
 .theme-switch input { display: none; }
 
 /* ================= SCROLL ARROW ================= */
 #scroll-arrow {
     position: absolute;
-    /* FIX: Changed to 5vh to ensure it is visible on all mobile screen heights */
     bottom: 5vh;
     left: 50%;
     transform: translateX(-50%);
@@ -172,21 +155,18 @@ section{
   40% { transform: translateX(-50%) translateY(-10px); }
   60% { transform: translateX(-50%) translateY(-5px); }
 }
-/* ======================================================= */
 
 /* Titles using KOMIKAGL */
 .title-main {
   font-family: 'Komika', sans-serif;
   font-size:28px;
   line-height:1;
-  /* CHANGED: Negative margin pulls title up to align with Sun Icon bottom */
   margin: -15px 0 0; 
   font-weight:normal;
   letter-spacing:0.5px
 }
 .title-sub{font-size:18px;margin:2px 0 6px;color:var(--muted)}
 
-/* Player area compact */
 #player{display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding-bottom:6px}
 
 /* Controls */
@@ -215,10 +195,9 @@ section{
 #likeButton::after{ content: attr(data-icon); display:block; width:100%; text-align:center; font-size:16px; line-height:1; pointer-events:none; }
 #likeButton.liked { background: var(--accent); color: #fff; border-color:var(--accent); }
 
-/* Custom class for disabled button */
 .disabled-btn { opacity: 0.5; pointer-events: none; } 
 
-/* --- FLEXBOX FIX FOR JOG WHEEL ALIGNMENT (Replaces Grid) --- */
+/* --- FLEXBOX FIX FOR JOG WHEEL --- */
 #wheelRow {
   display: flex;
   align-items: center;
@@ -227,22 +206,8 @@ section{
   max-width: 420px;
   margin-top: 8px;
 }
-
-/* Empty left spacer */
-#wheelRow > div:first-child {
-  flex: 1;
-  width: 0; 
-}
-
-/* Center cell for the wheel */
-#wheelCell {
-  flex: 0 0 auto; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Right cell for volume */
+#wheelRow > div:first-child { flex: 1; width: 0; }
+#wheelCell { flex: 0 0 auto; display: flex; justify-content: center; align-items: center; }
 #volumeCell {
   flex: 1;
   width: 0; 
@@ -250,11 +215,9 @@ section{
   justify-content: flex-start;
   align-items: center;
   padding-left: 6px;
-  transform: translateX(-60px); /* Keep original look but in flex container */
+  transform: translateX(-60px); 
 }
-/* ---------------------------------------------------------- */
 
-/* jog wheel */
 #jog-wheel{
   width:120px;height:120px;border-radius:50%;
   background: url('wheel.jpg') no-repeat center/cover;
@@ -268,7 +231,6 @@ section{
 }
 #jog-wheel:active { cursor: grabbing; }
 
-/* Album Art Style */
 #albumArt {
   width: 100%; 
   height: 100%;
@@ -281,7 +243,6 @@ section{
   z-index: 1;
 }
 
-/* volume knob */
 .volume-wrap{
   display:flex;flex-direction:column;align-items:center;gap:8px;
   user-select:none;touch-action:none;
@@ -289,11 +250,9 @@ section{
 }
 .volume-label{font-size:12px;color:var(--muted);margin-bottom:2px}
 .volume-slider{ -webkit-appearance:none; appearance:none; width:110px; height:26px; background:transparent; transform: rotate(-90deg); outline:none; cursor:pointer; }
-/* Darker track for light background */
 .volume-slider::-webkit-slider-runnable-track{ width:100%; height:6px; background:#ccc; border-radius:6px; }
 .volume-slider::-webkit-slider-thumb{ -webkit-appearance:none; width:18px;height:18px;border-radius:50%;background:#fff;margin-top:-6px; box-shadow:0 0 0 3px rgba(255,68,68,0.2); border: 1px solid #ddd; }
 
-/* Track name */
 #trackName{
   margin-top:6px;
   color:var(--muted);
@@ -302,42 +261,24 @@ section{
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Ensure opacity starts at 1 so initial empty state is fine */
   opacity: 1;
 }
 
-/* --- NEW ANIMATION STYLES --- */
-@keyframes softFade {
-  0% { opacity: 0; transform: translateY(0px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
+@keyframes softFade { 0% { opacity: 0; transform: translateY(0px); } 100% { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: softFade 0.25s ease-out forwards; }
 
-.fade-in {
-  animation: softFade 0.25s ease-out forwards;
-}
-/* ---------------------------- */
-
-/* --- NEW WAVEFORM STYLES (Updated for display-only) --- */
 #waveformContainer {
     width: 100%;
     max-width: 80px;
-    height: 30px; /* Adjusted height for compactness */
-    margin-top: 2px; /* Space below the track name */
+    height: 30px; 
+    margin-top: 2px; 
     display: flex;
-    justify-content: center; /* Center the canvas */
+    justify-content: center; 
     align-items: center;
-    cursor: default; /* Set to default to remove interactivity hint */
+    cursor: default; 
 }
+#waveformCanvas { width: 100%; height: 100%; display: block; }
 
-#waveformCanvas {
-    width: 100%;
-    height: 100%;
-    /* Ensure the canvas is display:block to avoid issues */
-    display: block; 
-}
-/* ----------------------------- */
-
-/* SFX block */
 .sfx-block{margin-top:2px;display:flex;flex-direction:column;align-items:center;width:100%}
 #sfx-grid-inner{display:grid;grid-template-columns:repeat(3,80px);grid-gap:10px;justify-content:center;margin-top:2px}
 .sfx-button{
@@ -352,13 +293,9 @@ section{
 }
 .sfx-number{position:absolute;top:6px;left:50%;transform:translateX(-50%);pointer-events:none;font-weight:normal;font-size:14px; opacity:0.6;}
 .sfx-button:active{transform:scale(0.97);background:var(--accent); color:#fff; border-color:var(--accent);}
-
-/* Staggered Animation Class */
 .flash-red { animation: flickerRed 0.2s ease-out forwards; }
-
 #refreshButton{margin-top:12px;padding:8px 16px;font-size:14px;background:var(--btn);color:var(--btn-text);border:1px solid #ccc;border-radius:8px;cursor:pointer; font-family: 'KomikaText', sans-serif;}
 
-/* PAGE 2 & 3 Styles */
 #page2, #page3 { 
   padding:18px; 
   display:flex; 
@@ -370,7 +307,6 @@ section{
 }
 #page3 { background-color: var(--bg-page3); }
 
-/* Section Titles using KOMIKAGL */
 .page2-title, .page3-title { 
   font-family: 'Komika', sans-serif;
   padding-top:28px; 
@@ -382,40 +318,12 @@ section{
 .page2-text, .page3-text { max-width:720px; color:var(--muted); text-align:left; margin:6px 8px; font-size:20px; line-height:1.45; }
 .page2-photo, .page3-photo { margin-top:14px; border-radius:8px; object-fit:contain; width:50%; height:auto; }
 
-/* Partners strip */
-#partners-strip{
-  position:relative;
-  width:100%;
-  overflow:hidden;
-  height:200px; 
-  margin-top:100px; 
-  display:flex;
-  align-items:center;
-  touch-action: none; 
-}
-
-#partners-strip-inner{
-  display:flex; 
-  min-width: 200%; 
-  top:50%; 
-  transform:translateY(-50%); 
-  will-change: transform; 
-}
-
-#partners-strip-inner img{
-  height:60px; 
-  width: auto; 
-  object-fit: contain; 
-  margin:0 32px;
-  display:inline-block;
-  filter: var(--logo-filter);
-  transition: filter 0.3s ease;
-}
-
+#partners-strip{ position:relative; width:100%; overflow:hidden; height:200px; margin-top:100px; display:flex; align-items:center; touch-action: none; }
+#partners-strip-inner{ display:flex; min-width: 200%; top:50%; transform:translateY(-50%); will-change: transform; }
+#partners-strip-inner img{ height:60px; width: auto; object-fit: contain; margin:0 32px; display:inline-block; filter: var(--logo-filter); transition: filter 0.3s ease; }
 
 @keyframes flickerRed{ 0%{background:var(--sfx-bg)} 50%{background:#ff4444} 100%{background:var(--sfx-bg)} }
 
-/* responsive rules */
 @media (max-width:980px){ .page2-photo, .page3-photo{ width:60%; } }
 @media (max-width:720px){
   .page2-photo, .page3-photo{ width:90%; }
@@ -426,10 +334,8 @@ section{
   .sfx-button{width:72px;height:72px;font-size:14px}
   .control-btn{width:72px;font-size:13px;padding:6px}
   #trackName{font-size:16px}
-  
   #partners-strip{ height: 80px; margin-top: 30px; }
   #partners-strip-inner img{ height:48px; margin:0 24px; }
-  
   #waveformContainer { height: 20px; }
   .top-header { padding: 10px 20px 0 20px; }
 }
@@ -476,10 +382,7 @@ section{
     </div>
 
     <div id="trackName"></div>
-    
-    <div id="waveformContainer">
-        <canvas id="waveformCanvas"></canvas>
-    </div>
+    <div id="waveformContainer"><canvas id="waveformCanvas"></canvas></div>
     <div class="sfx-block" aria-label="SFX pads and refresh">
       <div id="sfx-grid-inner"></div>
       <button id="refreshButton" aria-label="Refresh SFX">Reload</button>
@@ -517,43 +420,20 @@ section{
   </div>
   <img class="page3-photo" src="contact-photo.png" alt="Contact photo">
   
-  <div style="
-    display:flex; 
-    flex-wrap: wrap; 
-    align-items:center; 
-    justify-content:center; 
-    gap:16px; 
-    margin-top:12px; 
-    width:100%; 
-    max-width:420px;
-  ">
-    
+  <div style="display:flex; flex-wrap: wrap; align-items:center; justify-content:center; gap:16px; margin-top:12px; width:100%; max-width:420px;">
     <div style="display:flex; align-items:center; gap:10px;">
-      <span style="
-          font-family:'KomikaText', sans-serif; 
-          color:var(--muted); 
-          font-size:16px; 
-          text-align: right; 
-      ">instagram</span>
+      <span style="font-family:'KomikaText', sans-serif; color:var(--muted); font-size:16px; text-align: right;">instagram</span>
       <a href="https://www.instagram.com/brrrt.audio/" target="_blank" rel="noopener" class="control-btn" style="width:48px; height:48px; min-width:48px; font-size:22px; padding:0; display:flex; align-items:center; justify-content:center; text-decoration:none; color:var(--btn-text);">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
       </a>
     </div>
 
     <div style="display:flex; align-items:center; gap:10px;">
-      <span id="copyFeedback" style="
-          font-family:'KomikaText', sans-serif; 
-          color:var(--muted); 
-          font-size:16px; 
-          width: 150px; 
-          text-align: right; 
-          display: inline-block;
-      ">copy to clipboard</span>
+      <span id="copyFeedback" style="font-family:'KomikaText', sans-serif; color:var(--muted); font-size:16px; width: 150px; text-align: right; display: inline-block;">copy to clipboard</span>
       <button id="copyEmailBtn" class="control-btn" style="width:48px; height:48px; min-width:48px; font-size:22px; padding:0; display:flex; align-items:center; justify-content:center;" aria-label="Copy Email">
         ❐
       </button>
     </div>
-
   </div>
 
   <div id="partners-strip">
@@ -580,7 +460,6 @@ section{
 </section>
 
 <script>
-/* ================= SECURITY SHIELD ================= */
 document.onkeydown = function(e) {
     if (e.keyCode == 123) { return false; } 
     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } 
@@ -590,14 +469,11 @@ document.onkeydown = function(e) {
     if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; } 
 };
 
-/* ================= SYSTEM INIT ================= */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioCtx();
 const musicGain = audioContext.createGain();
 musicGain.connect(audioContext.destination);
 
-/* ================= FIREBASE INIT ================= */
-// YOUR ACTUAL FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDebtA94th7vA4dNOCVBgHnzG07_UaSkmM",
   authDomain: "brrrt-audio.firebaseapp.com",
@@ -607,14 +483,10 @@ const firebaseConfig = {
   appId: "1:280094161378:web:c20952c2c40b23db4461bb",
   measurementId: "G-SN37YNEW66"
 };
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const analytics = firebase.analytics();
-/* ================================================= */
 
-/* Persistence */
 const savedVolume = localStorage.getItem('brrrt_music_volume')!==null ? parseFloat(localStorage.getItem('brrrt_music_volume')) : 0.8;
 musicGain.gain.value = savedVolume;
 let likes=JSON.parse(localStorage.getItem('trackLikes')||'{}');
@@ -626,7 +498,7 @@ let currentTrack = null;
 let lastPlayedTrackUrl = ''; 
 let trackQueue = []; 
 
-/* Vinyl Physics Variables */
+/* Vinyl Physics */
 let isScrubbing = false;
 let isHolding = false;
 let playHeadTime = 0;       
@@ -634,16 +506,14 @@ let currentVelocity = 0;
 let targetVelocity = 0;     
 let wheelRotation = 0;
 let lastPointerX = 0;
-let lastTimestamp = performance.now(); // Initialized here for the main loop
+let lastTimestamp = performance.now(); 
 
-/* --- WAVEFORM VARIABLES --- */
+/* Waveform */
 let waveformPeaks = []; 
 const canvas = document.getElementById('waveformCanvas');
 const ctx = canvas.getContext('2d');
 const DENSITY_FACTOR = 6; 
-/* -------------------------- */
 
-/* DOM */
 const playButton=document.getElementById('playButton');
 const nextButton=document.getElementById('nextButton');
 const likeButton=document.getElementById('likeButton');
@@ -653,7 +523,6 @@ const volumeSlider=document.getElementById('volumeSlider');
 volumeSlider.value=savedVolume; 
 const albumArtImg = document.getElementById('albumArt'); 
 
-/* Files */
 const musicPath='audio/music/';
 const trackList=[
     { url: 'Afternoon Adventure.ogg', display: 'Afternoon Adventure' },
@@ -727,9 +596,6 @@ let tracks = trackList.map(t => ({
     display: t.display
 }));
 
-
-/* ================= SHUFFLE LOGIC ================= */
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -741,7 +607,6 @@ function getNextTrackFromQueue() {
     if (trackQueue.length === 0) {
         trackQueue = [...tracks]; 
         shuffleArray(trackQueue); 
-        
         if (currentTrack && trackQueue.length > 1 && trackQueue[0].url === currentTrack.url) {
             const swapIndex = Math.floor(Math.random() * (trackQueue.length - 1)) + 1;
             [trackQueue[0], trackQueue[swapIndex]] = [trackQueue[swapIndex], trackQueue[0]];
@@ -750,17 +615,13 @@ function getNextTrackFromQueue() {
     return trackQueue.pop(); 
 }
 
-/* ================= WAVEFORM CALCULATION AND DRAWING ================= */
-
 function getWaveformPeaks(audioBuffer, width) {
     if (!audioBuffer) return [];
-    
     const data = audioBuffer.getChannelData(0); 
     const totalSamples = data.length;
     const peaks = [];
     const numPeaksToDraw = Math.ceil(width / DENSITY_FACTOR); 
     const samplesPerPeak = totalSamples / numPeaksToDraw; 
-    
     for (let i = 0; i < numPeaksToDraw; i++) {
         const startSample = Math.floor(i * samplesPerPeak);
         const endSample = Math.floor((i + 1) * samplesPerPeak);
@@ -779,18 +640,14 @@ function drawWaveform() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         return;
     }
-    
     const width = canvas.offsetWidth;
     const height = canvas.offsetHeight;
-    
     if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
         waveformPeaks = getWaveformPeaks(audioBuffer, width); 
     }
-    
     ctx.clearRect(0, 0, width, height);
-    
     const center = height / 2;
     const totalDuration = audioBuffer.duration;
     const peakBarWidth = width / waveformPeaks.length; 
@@ -799,46 +656,33 @@ function drawWaveform() {
     ctx.beginPath();
     ctx.lineCap = 'butt';
     ctx.lineWidth = 1;
-
-    // --- Draw the UNPLAYED (Fill) Waveform ---
     ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--waveform-fill');
-    
     for (let i = 0; i < waveformPeaks.length; i++) {
         const x = i * peakBarWidth; 
         const peak = waveformPeaks[i];
         const barHeight = Math.max(1, peak * height * 0.9); 
-        
         ctx.moveTo(x, center - barHeight / 2);
         ctx.lineTo(x, center + barHeight / 2);
     }
     ctx.stroke();
 
-    // --- Draw the PLAYED (Progress) Waveform ---
     ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--waveform-progress');
-    
     ctx.beginPath();
     for (let i = 0; i < waveformPeaks.length; i++) {
         const x = i * peakBarWidth; 
         if (x > playedX) break; 
-        
         const peak = waveformPeaks[i];
         const barHeight = Math.max(1, peak * height * 0.9);
-        
         ctx.moveTo(x, center - barHeight / 2);
         ctx.lineTo(x, center + barHeight / 2);
     }
     ctx.stroke();
 }
 
-/* ================= AUDIO ENGINE ================= */
-
 async function loadTrack(trackObject){
   const url = trackObject.url;
-  
-  // ... (Album Art loading logic remains the same) ...
   const filenameNoExt = trackObject.display; 
   albumArtImg.style.display = 'none'; 
-  
   const underscoreFilename = filenameNoExt.replace(/ /g, '_');
   const pathsToTry = [
       `visual/album_art/${underscoreFilename}.png`,      
@@ -848,9 +692,7 @@ async function loadTrack(trackObject){
       `visual/album_art/${filenameNoExt.toLowerCase()}.png`,
       `visual/album_art/${encodeURIComponent(filenameNoExt.toLowerCase())}.png`
   ];
-  
   let pathIndex = 0;
-  
   function attemptLoad() {
       if (pathIndex >= pathsToTry.length) {
           albumArtImg.style.display = 'none'; 
@@ -861,7 +703,6 @@ async function loadTrack(trackObject){
       albumArtImg.onerror = () => { pathIndex++; attemptLoad(); };
       albumArtImg.src = currentPath;
   }
-  
   attemptLoad();
 
   try{
@@ -879,7 +720,7 @@ async function loadTrack(trackObject){
     waveformPeaks = getWaveformPeaks(audioBuffer, canvas.offsetWidth); 
     drawWaveform(); 
   }catch(e){
-    console.error('loadTrack failed for URL:', url, 'Error:', e); 
+    console.error('loadTrack failed:', e); 
     trackNameDiv.textContent="Error loading track"; 
     audioBuffer = null;
     waveformPeaks = [];
@@ -942,8 +783,6 @@ async function loadRandomTrack() {
     await loadTrack(currentTrack);
 }
 
-/* ================= VINYL PHYSICS LOOP ================= */
-
 function updatePhysics() {
   const now = performance.now();
   const dt = (now - lastTimestamp) / 1000; 
@@ -979,7 +818,6 @@ function updatePhysics() {
     if(audioBuffer && playHeadTime > audioBuffer.duration) { playHeadTime = audioBuffer.duration; currentVelocity = 0; }
   }
 
-  // Visuals
   wheelRotation += (currentVelocity * 140) * dt;
   jogWheel.style.transform = `rotate(${wheelRotation}deg)`;
   drawWaveform(); 
@@ -1016,8 +854,6 @@ window.addEventListener('pointerup', (e) => {
   if(playButton.textContent === 'Pause') { targetVelocity = 1; }
 });
 
-
-/* ================= CONTROLS ================= */
 playButton.addEventListener('click',async()=>{
   if(audioContext.state === 'suspended') await audioContext.resume();
   if(!isPlaying) { playAudio(); startRamp(); } else { pauseAudio(); }
@@ -1034,16 +870,42 @@ volumeSlider.addEventListener('input',e=>{
   localStorage.setItem('brrrt_music_volume',String(v));
 });
 
-/* ================= LIKE BUTTON (FIREBASE) ================= */
+/* ================= VISIBILITY HANDLER ================= */
+// Logic:
+// Desktop: Visibility change (tabs, minimize) -> KEEP PLAYING
+// Mobile: Visibility change (home screen, switch app) -> MUTE
+document.addEventListener("visibilitychange", () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (window.innerWidth < 980);
+  
+  if (document.hidden) {
+    // If Hidden (Tab Switch OR Minimize)
+    if (isMobile) {
+      // Mobile: Mute
+      if (isPlaying) {
+         musicGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.5);
+      }
+    }
+    // Desktop: Do nothing (Continues playing). 
+    // This ensures music plays when switching tabs.
+    // Side effect: Music also plays when minimized on Desktop.
+  } else {
+    // If Visible
+    // Restore volume if we were playing
+    if (isPlaying) {
+       const vol = parseFloat(volumeSlider.value);
+       musicGain.gain.setTargetAtTime(vol, audioContext.currentTime, 0.5);
+    }
+  }
+});
+/* ====================================================== */
+
 likeButton.addEventListener('click', async () => {
   const url = currentTrack.url;
   likes[url] = !likes[url];
   localStorage.setItem('trackLikes', JSON.stringify(likes));
   updateLikeButton();
-
   const trackName = currentTrack.display;
   const trackRef = db.collection("songs").doc(trackName);
-
   try {
       if (likes[url]) {
           await trackRef.set({ likes: firebase.firestore.FieldValue.increment(1) }, { merge: true });
@@ -1059,7 +921,6 @@ function updateLikeButton(){
   likeButton.classList.toggle('liked',!!likes[url]);
 }
 
-/* ================= SFX ================= */
 const sfxGridInner=document.getElementById('sfx-grid-inner');
 const sfxButtons=[];
 const sfxBuffers={};
@@ -1122,7 +983,6 @@ document.getElementById('refreshButton').addEventListener('click', async()=>{
   refreshSFX();
 });
 
-/* ================= PARTNERS STRIP LOGIC ================= */
 const partnersInner=document.getElementById('partners-strip-inner');
 const partnersStrip = document.getElementById('partners-strip');
 let isStripScrubbing = false;
@@ -1176,7 +1036,6 @@ partnersStrip.addEventListener('pointerdown', (e) => {
     lastStripPointerX = e.clientX;
     stripVelocity = 0; 
 });
-
 window.addEventListener('pointermove', (e) => {
   if (!isStripScrubbing) return;
   e.preventDefault();
@@ -1185,14 +1044,11 @@ window.addEventListener('pointermove', (e) => {
   stripPosition += dx;
   partnersInner.style.transform = `translate3d(${stripPosition}px, -50%, 0)`;
 });
-
 window.addEventListener('pointerup', (e) => {
     if (!isStripScrubbing) return;
     isStripScrubbing = false;
 });
 
-
-/* ================= COPY TO CLIPBOARD ================= */
 const myEmail = "jony@brrrt.audio"; 
 const copyEmailBtn = document.getElementById('copyEmailBtn');
 const copyFeedback = document.getElementById('copyFeedback');
@@ -1202,10 +1058,8 @@ if(copyEmailBtn){
     });
 }
 
-/* ================= DARK MODE LOGIC ================= */
 const sunSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
 const moonSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-
 const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const iconContainer = document.getElementById('theme-icon-container');
 const currentTheme = localStorage.getItem('theme');
@@ -1213,11 +1067,10 @@ const currentTheme = localStorage.getItem('theme');
 function updateThemeIcon(theme) {
     iconContainer.innerHTML = theme === 'dark' ? moonSVG : sunSVG;
     iconContainer.classList.remove('icon-enter');
-    void iconContainer.offsetWidth; // Force reflow
+    void iconContainer.offsetWidth; 
     iconContainer.classList.add('icon-enter');
 }
 
-// 1. Check for saved preference
 if (currentTheme) {
     document.documentElement.setAttribute('data-theme', currentTheme);
     if (currentTheme === 'dark') {
@@ -1232,54 +1085,38 @@ if (currentTheme) {
     updateThemeIcon('light');
 }
 
-// --- NEW FUNCTION: Theme-based Volume Adjustment ---
 function adjustVolumeForTheme(amount) {
     let currentVol = parseFloat(volumeSlider.value);
     let newVol = currentVol + amount;
-    
-    // Clamp to 0-1
     if(newVol > 1) newVol = 1;
     if(newVol < 0) newVol = 0;
-    
-    // Apply changes
     volumeSlider.value = newVol;
     musicGain.gain.setTargetAtTime(newVol, audioContext.currentTime, 0.1);
     localStorage.setItem('brrrt_music_volume', String(newVol));
 }
-// ---------------------------------------------------
 
-// 2. Toggle Handler
 function switchTheme(e) {
     if (e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
         updateThemeIcon('dark');
-        adjustVolumeForTheme(-0.4); // Drops 40% from current position
+        adjustVolumeForTheme(-0.4); 
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
         updateThemeIcon('light');
-        adjustVolumeForTheme(0.4); // Raises 40% from current position
+        adjustVolumeForTheme(0.4); 
     }
 }
-
 toggleSwitch.addEventListener('change', switchTheme);
+iconContainer.addEventListener('click', () => { toggleSwitch.click(); });
 
-// 3. Icon Click Handler (Simulates Toggle Click)
-iconContainer.addEventListener('click', () => {
-    toggleSwitch.click(); 
-});
-
-/* ================= SCROLL FADE ARROW ================= */
-// Use a robust scroll check
 function getScrollTop() {
     return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 }
-
 window.addEventListener('scroll', () => {
     const arrow = document.getElementById('scroll-arrow');
     if (!arrow) return;
-    
     const scrollY = getScrollTop();
     const fadePoint = 300; 
     let opacity = 1 - (scrollY / fadePoint);
@@ -1287,7 +1124,6 @@ window.addEventListener('scroll', () => {
     arrow.style.opacity = opacity;
 });
 
-/* ================= INITIALIZATION ================= */
 window.addEventListener('load', () => {
   loadRandomTrack();
   refreshSFX();
