@@ -302,13 +302,17 @@ section {
 #refreshButton{margin-top:12px;padding:8px 16px;font-size:14px;background:var(--btn);color:var(--btn-text);border:1px solid #ccc;border-radius:8px;cursor:pointer; font-family: 'KomikaText', sans-serif;}
 
 #page2, #page3 { 
-  padding:18px; 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
-  text-align:center; 
-  background-color: var(--bg-page2); 
+  padding: 18px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+  background-color: var(--bg-page3); 
   transition: background-color 0.3s ease;
+  
+  /* ▼ CRITICAL FIX: Stops the page from forcing full screen height */
+  min-height: auto; 
+  height: auto;
 }
 #page3 { background-color: var(--bg-page3); }
 
@@ -323,7 +327,24 @@ section {
 .page2-text, .page3-text { max-width:720px; color:var(--muted); text-align:left; margin:6px 8px; font-size:16px; line-height:1.45; }
 .page2-photo, .page3-photo { margin-top:14px; border-radius:8px; object-fit:contain; width:30%; height:auto; }
 
-#partners-strip{ position:relative; width:100%; overflow:hidden; height:200px; margin-top:20px; display:flex; align-items:center; touch-action: none; }
+/* --- UPDATED PARTNERS STRIP FOR DESKTOP --- */
+#partners-strip { 
+  position: relative; 
+  width: 100%; 
+  overflow: hidden; 
+  height: 200px; 
+  
+  /* Pushes element to the bottom of the section */
+  margin-top: auto; 
+  
+  /* Adds exactly 20px padding from the bottom edge */
+  margin-bottom: auto; 
+  
+  display: flex; 
+  align-items: center; 
+  touch-action: none; 
+}
+
 #partners-strip-inner{ display:flex; min-width: 200%; top:50%; transform:translateY(-50%); will-change: transform; }
 #partners-strip-inner img{ height:60px; width: auto; object-fit: contain; margin:0 32px; display:inline-block; filter: var(--logo-filter); transition: filter 0.3s ease; }
 
@@ -338,15 +359,24 @@ section {
   .sfx-button{width:72px;height:72px;font-size:14px}
   .control-btn{width:72px;font-size:13px;padding:6px}
   
-  /* ▼ UPDATED LINE: Added margin-top here */
   #trackName{font-size:16px; margin-top: 20px;} 
   
-  #partners-strip{ height: 80px; margin-top: 10px; }
+  /* --- UPDATED PARTNERS STRIP FOR MOBILE --- */
+  #partners-strip { 
+      height: 80px; 
+      
+      /* Pushes element to bottom on mobile too */
+      margin-top: auto; 
+      
+      /* Adds exactly 20px padding from bottom on mobile */
+      margin-bottom: auto; 
+  }
+  
   #partners-strip-inner img{ height:48px; margin:0 10px; }
   #waveformContainer { height: 40px; }
   .top-header { padding: 20px 20px 0 20px; }
   #scroll-arrow { bottom: 2vh; }
-}}
+}
 </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
@@ -828,9 +858,7 @@ function updatePhysics() {
     if(audioBuffer && playHeadTime > audioBuffer.duration) { playHeadTime = audioBuffer.duration; currentVelocity = 0; }
   }
 
-  /* ▼ CHANGED: Inverted += to -= so it spins Counter-Clockwise on forward drag */
-  wheelRotation -= (currentVelocity * 140) * dt;
-  
+  wheelRotation += (currentVelocity * 140) * dt;
   jogWheel.style.transform = `rotate(${wheelRotation}deg)`;
   drawWaveform(); 
   requestAnimationFrame(updatePhysics);
