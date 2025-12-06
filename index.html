@@ -320,10 +320,10 @@ section {
   margin-bottom:12px; 
   color: var(--text-main);
 }
-.page2-text, .page3-text { max-width:720px; color:var(--muted); text-align:left; margin:6px 8px; font-size:20px; line-height:1.45; }
-.page2-photo, .page3-photo { margin-top:14px; border-radius:8px; object-fit:contain; width:50%; height:auto; }
+.page2-text, .page3-text { max-width:720px; color:var(--muted); text-align:left; margin:6px 8px; font-size:16px; line-height:1.45; }
+.page2-photo, .page3-photo { margin-top:14px; border-radius:8px; object-fit:contain; width:30%; height:auto; }
 
-#partners-strip{ position:relative; width:100%; overflow:hidden; height:200px; margin-top:100px; display:flex; align-items:center; touch-action: none; }
+#partners-strip{ position:relative; width:100%; overflow:hidden; height:200px; margin-top:10px; display:flex; align-items:center; touch-action: none; }
 #partners-strip-inner{ display:flex; min-width: 200%; top:50%; transform:translateY(-50%); will-change: transform; }
 #partners-strip-inner img{ height:60px; width: auto; object-fit: contain; margin:0 32px; display:inline-block; filter: var(--logo-filter); transition: filter 0.3s ease; }
 
@@ -339,8 +339,8 @@ section {
   .sfx-button{width:72px;height:72px;font-size:14px}
   .control-btn{width:72px;font-size:13px;padding:6px}
   #trackName{font-size:16px}
-  #partners-strip{ height: 80px; margin-top: 30px; }
-  #partners-strip-inner img{ height:48px; margin:0 24px; }
+  #partners-strip{ height: 80px; margin-top: 10px; }
+  #partners-strip-inner img{ height:48px; margin:0 10px; }
   #waveformContainer { height: 20px; }
   .top-header { padding: 10px 20px 0 20px; }
   #scroll-arrow { bottom: 2vh; }
@@ -826,7 +826,9 @@ function updatePhysics() {
     if(audioBuffer && playHeadTime > audioBuffer.duration) { playHeadTime = audioBuffer.duration; currentVelocity = 0; }
   }
 
-  wheelRotation += (currentVelocity * 140) * dt;
+  /* ▼ CHANGED: Inverted += to -= so it spins Counter-Clockwise on forward drag */
+  wheelRotation -= (currentVelocity * 140) * dt;
+  
   jogWheel.style.transform = `rotate(${wheelRotation}deg)`;
   drawWaveform(); 
   requestAnimationFrame(updatePhysics);
