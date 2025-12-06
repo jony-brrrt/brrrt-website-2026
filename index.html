@@ -866,9 +866,20 @@ nextButton.addEventListener('click',async()=>{
 
 volumeSlider.addEventListener('input',e=>{
   const v=parseFloat(e.target.value);
+  // Cancel any running animation if the user grabs the slider manually
+  if (volumeAnimFrame) { cancelAnimationFrame(volumeAnimFrame); volumeAnimFrame = null; }
   musicGain.gain.setTargetAtTime(v,audioContext.currentTime, 0.1);
   localStorage.setItem('brrrt_music_volume',String(v));
 });
+
+// Added to prevent ghost animation if user clicks the slider while it is moving
+volumeSlider.addEventListener('pointerdown', () => {
+    if (volumeAnimFrame) {
+        cancelAnimationFrame(volumeAnimFrame);
+        volumeAnimFrame = null;
+    }
+});
+
 
 /* ================= VISIBILITY HANDLER ================= */
 // Logic:
@@ -1085,14 +1096,50 @@ if (currentTheme) {
     updateThemeIcon('light');
 }
 
+/* ================= NEW ANIMATION LOGIC ================= */
+let volumeAnimFrame = null;
+
+function animateVolumeTo(targetValue, duration = 600) {
+    // 1. Stop any current animation if one is running
+    if (volumeAnimFrame) cancelAnimationFrame(volumeAnimFrame);
+
+    const startValue = parseFloat(volumeSlider.value);
+    const startTime = performance.now();
+
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        let progress = elapsed / duration;
+
+        if (progress > 1) progress = 1;
+
+        // 2. Add Easing (Ease Out Cubic) so it feels like a hand moving it naturally
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const currentVal = startValue + (targetValue - startValue) * ease;
+
+        // 3. Update Visual Slider & Audio Gain
+        volumeSlider.value = currentVal;
+        musicGain.gain.value = currentVal;
+
+        if (progress < 1) {
+            volumeAnimFrame = requestAnimationFrame(step);
+        } else {
+            // 4. Save final state
+            localStorage.setItem('brrrt_music_volume', String(targetValue));
+            volumeAnimFrame = null;
+        }
+    }
+    volumeAnimFrame = requestAnimationFrame(step);
+}
+
 function adjustVolumeForTheme(amount) {
     let currentVol = parseFloat(volumeSlider.value);
     let newVol = currentVol + amount;
+    
     if(newVol > 1) newVol = 1;
     if(newVol < 0) newVol = 0;
-    volumeSlider.value = newVol;
-    musicGain.gain.setTargetAtTime(newVol, audioContext.currentTime, 0.1);
-    localStorage.setItem('brrrt_music_volume', String(newVol));
+    
+    // Use the smooth animation instead of setting it instantly
+    animateVolumeTo(newVol); 
 }
 
 function switchTheme(e) {
@@ -1100,11 +1147,15 @@ function switchTheme(e) {
         document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
         updateThemeIcon('dark');
+        
+        // ▼ CONTROL PERCENTAGE HERE (Currently drops 40%)
         adjustVolumeForTheme(-0.4); 
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
         updateThemeIcon('light');
+        
+        // ▼ RESTORE PERCENTAGE HERE (Currently restores 40%)
         adjustVolumeForTheme(0.4); 
     }
 }
